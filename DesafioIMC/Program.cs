@@ -76,15 +76,16 @@ namespace DesafioIMC
 
         public static void DiagnosticoImc(double imc, double peso, double altura)
         {
+            string imcDesejavel = "Entre 20 e 24";
+
             string riscos = CalculaRiscos(imc);
             string recomendacoesIniciais = CalculaRecomendacao(imc);
-            
+
+            Console.WriteLine($"\nIMC Desejável: {imcDesejavel}");
             Console.WriteLine($"Resultado IMC: {imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
+            Console.WriteLine($"Riscos: {riscos}");
+            Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
         }
-
-
-
-        
 
         private static string CalculaRecomendacao(double imc)
         {
@@ -92,15 +93,15 @@ namespace DesafioIMC
             {
                 return "Muitas complicações de saúde como doenças pulmonares e cardiovasculares podem estar associadas ao baixo peso.";
             }
-            else if (imc >= 20 || imc < 25)
+            else if (imc >= 20 && imc < 25)
             {
                 return "Seu peso está ideal para suas referências.";
             }
-            else if (imc >= 25 || imc < 30)
+            else if (imc >= 25 && imc < 30)
             {
                 return "Aumento de peso apresenta risco moderado para outras doenças crônicas e cardiovasculares.";
             }
-            else if (imc >= 30 || imc < 35)
+            else if (imc >= 30 && imc < 35)
             {
                 return "Quem tem obesidade vai estar mais exposto a doenças graves e ao risco de mortalidade.";
             }
@@ -116,15 +117,15 @@ namespace DesafioIMC
             {
                 return "Inclua carboidratos simples em sua dieta, além de proteínas indispensáveis para ganho de massa magra. Procure um profissional.";
             }
-            else if (imc >= 20 || imc < 25)
+            else if (imc >= 20 && imc < 25)
             {
                 return "Mantenha uma dieta saudável e faça seus exames periódicos.";
             }
-            else if (imc >= 25 || imc < 30)
+            else if (imc >= 25 && imc < 30)
             {
                 return "Adote um tratamento baseado em dieta balanceada, exercício físico e medicação. A ajuda de um profissional pode ser interessante";
             }
-            else if (imc >= 30 || imc < 35)
+            else if (imc >= 30 && imc < 35)
             {
                 return "Adote uma dieta alimentar rigorosa, com o acompanhamento de um nutricionista e um médico especialista(endócrino).";
             }
