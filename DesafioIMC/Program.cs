@@ -9,11 +9,12 @@ namespace DesafioIMC
         {
             TelaInicial();
         }
-        private static void TelaInicial()
+        static void TelaInicial()
         {
+            // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
-
-            Console.WriteLine("\tCálculo de IMC para diagnóstico prévio\n");
+            Console.WriteLine("\tCálculo de IMC para diagnóstico prévio");
+            Espacos("=-");
 
             Console.Write("Insira o nome do paciente: ");
             string nome = Console.ReadLine();
@@ -30,28 +31,54 @@ namespace DesafioIMC
                 idadeValida = int.TryParse(Console.ReadLine(), out idade);
             }
 
-            Console.Write("Insira a sua altura: ");
-            double altura = Convert.ToDouble(Console.ReadLine());
+            // Recebimento da altura em Double para considerar as casas decimais.
+            // Faz a validação do dado recebido e força a cultura "pt-br" para trabalhar tanto com vírgula, quanto com ponto.
+            // Faz a validação também se foi digitado algo que não seja um número
+            double altura = 0;
+            bool validaAltura = false;
+            do
+            {
+                Console.Write("Insira a sua altura: ");
+                validaAltura = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out altura);
 
-            Console.Write("Insira o peso do paciente: ");
-            double peso = Convert.ToDouble(Console.ReadLine());
+            } while (!validaAltura);
 
+
+            // Recebimento do peso em double para considerar as casas decimais.
+            // Faz a validação do dado recebido e força a cultura "pt-br" para trabalhar tanto com vírgula, quanto com ponto.
+            // Faz a validação também se foi digitado algo que não seja um número 
+            double peso = 0;
+            bool validaPeso = false;
+            do
+            {
+                Console.Write("Insira o peso do paciente: ");
+                validaPeso = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out peso);
+            } while (!validaPeso);
+
+            // Chamada da função para calcular o IMC e retornar o valor do IMC como double, considerando as casas decimais.
             double imc = CalculaImc(peso, altura);
 
-            // Chama a função para exibir a primeira parte da tela de diagnósticos
-            TelaInfoIniciais(nome, sexo, idade, altura, peso);
-            // Chama a função que exibe a segunda parte da tela de diagnósticos
-            DiagnosticoImc(imc, peso, altura);
+            // Chama a função para exibir a primeira parte da tela de diagnósticos com nome, sexo, idade, altura e peso
+            TelaIniciallDiagnostico(nome, sexo, idade, altura, peso);
+
+            // Chama a função que exibe a segunda parte da tela de diagnósticos com imc desejável, resultado, riscos e recomendação inicial
+            TelaFinalDiagnostico(imc, peso, altura);
 
             Espacos("_+");
         }
-        private static void TelaInfoIniciais(string nome, string sexo, int idade, double altura, double peso)
+
+        // Função que exibe a segunda parte da tela de diagnósticos com imc desejável, resultado, riscos e recomendação inicial
+        static void TelaIniciallDiagnostico(string nome, string sexo, int idade, double altura, double peso)
         {
+            // Chama a função IdentificaCategoria passando a idade da pessoa e retornando uma string de acordo com a faixa etária.
             string categoria = IdentificaCategoria(idade);
+
+            // Limpa o console
             Console.Clear();
+
             Espacos("_+");
 
-            Console.WriteLine("\t\tCálculo de IMC\n");
+            Console.WriteLine("\t\tCálculo de IMC");
             Espacos("=-");
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
             Console.WriteLine($"Nome: {nome}");
@@ -62,7 +89,25 @@ namespace DesafioIMC
             Console.WriteLine($"Categoria: {categoria}");
         }
 
-        private static string IdentificaCategoria(int idade)
+        // Função que apresenta a segunda parte da tela de diagnóstico prévio
+        static void TelaFinalDiagnostico(double imc, double peso, double altura)
+        {
+            string imcDesejavel = "Entre 20 e 24";
+
+            // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como parâmetro da função.
+            string riscos = CalculaRiscos(imc);
+
+            // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como parâmetro da função.
+            string recomendacoesIniciais = CalculaRecomendacao(imc);
+
+            Console.WriteLine($"\nIMC Desejável: {imcDesejavel}");
+            Console.WriteLine($"Resultado IMC: {imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
+            Console.WriteLine($"Riscos: {riscos}");
+            Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
+        }
+
+        // Recebe o parâmetro "idade" e faz a conferência para retornar a categoria em que a pessoa se encontra.
+        static string IdentificaCategoria(int idade)
         {
             if (idade > 65)
             {
@@ -82,28 +127,16 @@ namespace DesafioIMC
             }
         }
 
-        private static double CalculaImc(double peso, double altura)
+        // Função que retorna o imc calculado com base no peso e na altura - imc = peso/(altura * altura) ou imc = peso/(Math.Pow(altura, 2))
+        static double CalculaImc(double peso, double altura)
         {
+            // Poderia ser utilizada a função Math.Pow(base, expoente)
+            //return peso / (Math.Pow(altura, 2)); 
             return peso / (altura * altura);
         }
 
-        public static void DiagnosticoImc(double imc, double peso, double altura)
-        {
-            string imcDesejavel = "Entre 20 e 24";
-
-            // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como parâmetro da função.
-            string riscos = CalculaRiscos(imc);
-
-            // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como parâmetro da função.
-            string recomendacoesIniciais = CalculaRecomendacao(imc);
-
-            Console.WriteLine($"\nIMC Desejável: {imcDesejavel}");
-            Console.WriteLine($"Resultado IMC: {imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
-            Console.WriteLine($"Riscos: {riscos}");
-            Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
-        }
-
-        private static string CalculaRecomendacao(double imc)
+        // Função que calcula qual faixa de recomendação a pessoa se enquadra a partir do imc recebido como argumento
+        static string CalculaRecomendacao(double imc)
         {
             if (imc < 20)
             {
@@ -127,7 +160,8 @@ namespace DesafioIMC
             }
         }
 
-        private static string CalculaRiscos(double imc)
+        // Função que calcula em qual risco a pessoa se enquadra a partir do imc recebido como argumento
+        static string CalculaRiscos(double imc)
         {
             if (imc < 20)
             {
@@ -151,14 +185,15 @@ namespace DesafioIMC
             }
         }
 
-        public static void Sair()
+        static void Sair()
         {
             Espacos(".*");
             Console.WriteLine("Opção selecionada: Sair");
             Console.WriteLine("Até mais!");
             Environment.Exit(0);
         }
-        public static void Espacos(string simbolo)
+        // Cria uma linha de separação a partir de um símbolo em formato string
+        static void Espacos(string simbolo)
         {
             var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
