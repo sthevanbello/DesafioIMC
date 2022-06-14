@@ -16,19 +16,32 @@ namespace DesafioIMC
             Console.WriteLine("\tCálculo de IMC para diagnóstico prévio");
             Espacos("=-");
 
-            Console.Write("Insira o nome do paciente: ");
-            string nome = Console.ReadLine();
+            // Recebe o nome da pessoa e verifica se é um nome válido ou se há apenas espaços ou se só apertou a tecla "Enter"
+            string nome = "";
+            do
+            {
+                Console.Write("Insira o nome do paciente: ");
+                nome = Console.ReadLine();
 
-            Console.Write("Insira o sexo do paciente (Masculino / Feminino): ");
-            string sexo = Console.ReadLine();
+            } while (string.IsNullOrWhiteSpace(nome));
+
+
+            // Recebe o sexo da pessoa e verifica se é um sexo válido, se há apenas espaços ou se só apertou a tecla "Enter"
+            string sexo = "";
+            do
+            {
+                Console.Write("Insira o sexo do paciente (Masculino / Feminino): ");
+                sexo = Console.ReadLine();
+
+            } while (string.IsNullOrWhiteSpace(sexo));
 
             // recebimento da idade e verificação se é um valor inteiro válido
             int idade = 0;
-            bool idadeValida = false;
-            while (!idadeValida)
+            bool validaIdade = false;
+            while (!validaIdade)
             {
                 Console.Write("Insira a idade completa do paciente, sem casas decimais: ");
-                idadeValida = int.TryParse(Console.ReadLine(), out idade);
+                validaIdade = int.TryParse(Console.ReadLine(), out idade);
             }
 
             // Recebimento da altura em Double para considerar as casas decimais.
