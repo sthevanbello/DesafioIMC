@@ -13,23 +13,31 @@ namespace DesafioIMC
         {
             Espacos("_+");
 
-            Console.WriteLine("\t\tCálculo de IMC\n");
+            Console.WriteLine("\tCálculo de IMC para diagnóstico prévio\n");
+
             Console.Write("Insira o nome do paciente: ");
             string nome = Console.ReadLine();
 
-            Console.Write("Insira o sexo do paciente: ");
+            Console.Write("Insira o sexo do paciente (Masculino / Feminino): ");
             string sexo = Console.ReadLine();
 
-            Console.Write("Insira a idade do paciente: ");
-            int idade = Convert.ToInt16(Console.ReadLine());
-
-            Console.Write("Insira o peso do paciente: ");
-            double peso = Convert.ToDouble(Console.ReadLine());
+            // recebimento da idade e verificação se é um valor inteiro válido
+            int idade = 0;
+            bool idadeValida = false;
+            while (!idadeValida)
+            {
+                Console.Write("Insira a idade completa do paciente, sem casas decimais: ");
+                idadeValida = int.TryParse(Console.ReadLine(), out idade);
+            }
 
             Console.Write("Insira a sua altura: ");
             double altura = Convert.ToDouble(Console.ReadLine());
 
+            Console.Write("Insira o peso do paciente: ");
+            double peso = Convert.ToDouble(Console.ReadLine());
+
             double imc = CalculaImc(peso, altura);
+
             // Chama a função para exibir a primeira parte da tela de diagnósticos
             TelaInfoIniciais(nome, sexo, idade, altura, peso);
             // Chama a função que exibe a segunda parte da tela de diagnósticos
@@ -40,7 +48,11 @@ namespace DesafioIMC
         private static void TelaInfoIniciais(string nome, string sexo, int idade, double altura, double peso)
         {
             string categoria = IdentificaCategoria(idade);
+            Console.Clear();
+            Espacos("_+");
 
+            Console.WriteLine("\t\tCálculo de IMC\n");
+            Espacos("=-");
             Console.WriteLine($"Nome: {nome}");
             Console.WriteLine($"Sexo: {sexo}");
             Console.WriteLine($"Idade: {idade}");
