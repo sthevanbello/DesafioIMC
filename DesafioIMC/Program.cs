@@ -7,7 +7,10 @@ namespace DesafioIMC
     {
         static void Main(string[] args)
         {
+            // Chamada da função da Tela Inicial para iniciar a inserção de dados 
             TelaInicial();
+
+            // Término do programa ou voltar à tela inicial para inserir novos dados
             TelaDeDecisaoFinal();
         }
 
