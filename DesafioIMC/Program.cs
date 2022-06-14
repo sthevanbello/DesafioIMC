@@ -53,6 +53,7 @@ namespace DesafioIMC
 
             Console.WriteLine("\t\tCálculo de IMC\n");
             Espacos("=-");
+            Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
             Console.WriteLine($"Nome: {nome}");
             Console.WriteLine($"Sexo: {sexo}");
             Console.WriteLine($"Idade: {idade}");
@@ -67,11 +68,11 @@ namespace DesafioIMC
             {
                 return "Idoso";
             }
-            else if (idade >= 21 || idade <= 65)
+            else if (idade >= 21 && idade <= 65)
             {
                 return "Adulto";
             }
-            else if (idade >= 12 || idade <= 20)
+            else if (idade >= 12 && idade <= 20)
             {
                 return "Juvenil";
             }
@@ -90,7 +91,10 @@ namespace DesafioIMC
         {
             string imcDesejavel = "Entre 20 e 24";
 
+            // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como parâmetro da função.
             string riscos = CalculaRiscos(imc);
+
+            // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como parâmetro da função.
             string recomendacoesIniciais = CalculaRecomendacao(imc);
 
             Console.WriteLine($"\nIMC Desejável: {imcDesejavel}");
