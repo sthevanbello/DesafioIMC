@@ -8,41 +8,12 @@ namespace DesafioIMC
         static void Main(string[] args)
         {
             TelaInicial();
-            TelaDeDecisao();
+            TelaDeDecisaoFinal();
         }
 
-        private static void TelaDeDecisao()
-        {
-            bool fim = false;
-            //Espacos("_-");
-            Console.WriteLine("Insira a opção desejada\n");
-            Console.WriteLine("Opção 1 - Voltar à tela inicial");
-            Console.WriteLine("Opção 2 - Sair do programa");
-            Espacos(".*");
-            while (!fim)
-            {
-                Console.Write("Opção: ");
-                var escolha = 0;
-                var digitou = int.TryParse(Console.ReadLine(), out escolha);
-
-                if (digitou)
-                {
-                    if (escolha == 1)
-                    {
-                        TelaInicial();
-                    }
-                    else if (escolha == 2)
-                    {
-                        Sair();
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nDigite uma opção válida");
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// Exibe a tela inicial para inserir os dados do paciente
+        /// </summary>
         static void TelaInicial()
         {
             // Limpa a tela
@@ -71,7 +42,11 @@ namespace DesafioIMC
             Espacos("_+");
         }
 
-        private static object[] EntradaDeDados()
+        /// <summary>
+        /// Entrada dos dados informados pelo usuário
+        /// </summary>
+        /// <returns>Retorna um Array com os dados informados</returns>
+        static object[] EntradaDeDados()
         {
             // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter"
             string nome = "";
@@ -210,6 +185,7 @@ namespace DesafioIMC
             Console.WriteLine($"Riscos: {riscos}");
             Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
         }
+        
         /// <summary>
         /// Recebe o parâmetro "idade" e faz a conferência para retornar a categoria em que a pessoa se encontra.
         /// </summary>
@@ -312,7 +288,44 @@ namespace DesafioIMC
                 return "Procure com urgência o acompanhamento de um nutricionista para realizar reeducação alimentar, um psicólogo e um médicoespecialista(endócrino).";
             }
         }
+        
+        /// <summary>
+        /// Função para escolher se quer voltar à tela inicial ou se quer sair do programa
+        /// </summary>
+        static void TelaDeDecisaoFinal()
+        {
+            bool fim = false;
+            Console.WriteLine("Insira a opção desejada\n");
+            Console.WriteLine("Opção 1 - Voltar à tela inicial");
+            Console.WriteLine("Opção 2 - Sair do programa");
+            Espacos(".*");
+            while (!fim)
+            {
+                Console.Write("Opção: ");
+                var escolha = 0;
+                var digitou = int.TryParse(Console.ReadLine(), out escolha);
 
+                if (digitou)
+                {
+                    if (escolha == 1)
+                    {
+                        TelaInicial();
+                    }
+                    else if (escolha == 2)
+                    {
+                        Sair();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nDigite uma opção válida");
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Função para sair do programa
+        /// </summary>
         static void Sair()
         {
             Espacos(".*");
