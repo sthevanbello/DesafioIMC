@@ -10,7 +10,9 @@ namespace DesafioIMC
         }
         private static void TelaInicial()
         {
-            Console.WriteLine("\tCálculo de IMC\n");
+            Espacos("_+");
+
+            Console.WriteLine("\t\tCálculo de IMC\n");
             Console.Write("Insira o nome do paciente: ");
             string nome = Console.ReadLine();
 
@@ -26,11 +28,7 @@ namespace DesafioIMC
             Console.Write("Insira a sua altura: ");
             double altura = Convert.ToDouble(Console.ReadLine());
 
-            double imc = CalculaImc(peso, altura);
-            // Chama a função para exibir a primeira parte da tela de diagnósticos
-            TelaInfoIniciais(nome, sexo, idade, altura, peso);
-            // Chama a função que exibe a segunda parte da tela de diagnósticos
-            DiagnosticoImc(imc, peso, altura);
+
 
             Espacos("_+");
         }
@@ -47,7 +45,7 @@ namespace DesafioIMC
             var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Console.Write(simbolo);
             }
