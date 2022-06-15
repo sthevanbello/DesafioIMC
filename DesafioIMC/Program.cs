@@ -113,6 +113,8 @@ namespace DesafioIMC
                 validaIdade = int.TryParse(Console.ReadLine(), out idade);
 
                 // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
+                // Chama a função ValidaDados passando o resultado do TryParse e a idade inserida. 
+                // Retorna true para a variável se o valor inserido for válido
                 validaIdade = ValidaDados(validaIdade, idade);
             }
 
@@ -127,6 +129,8 @@ namespace DesafioIMC
                 validaAltura = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out altura);
 
                 // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
+                // Chama a função ValidaDados passando o resultado do TryParse e a altura inserida. 
+                // Retorna true para a variável se o valor inserido for válido
                 validaAltura = ValidaDados(validaAltura, altura);
 
             } while (!validaAltura);
@@ -143,6 +147,8 @@ namespace DesafioIMC
                 validaPeso = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out peso);
 
                 // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
+                // Chama a função ValidaDados passando o resultado do TryParse e o peso inserido. 
+                // Retorna true para a variável se o valor inserido for válido
                 validaPeso = ValidaDados(validaPeso, peso);
 
             } while (!validaPeso);
@@ -335,8 +341,6 @@ namespace DesafioIMC
             }
         }
 
-       
-        
         /// <summary>
         /// Função para escolher se quer voltar à tela inicial ou se quer sair do programa
         /// </summary>
