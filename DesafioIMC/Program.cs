@@ -42,7 +42,7 @@ namespace DesafioIMC
             // Chamada da função para calcular o IMC e retornar o valor do IMC como double, considerando as casas decimais.
             double imc = CalculaImc(peso, altura);
 
-            // Chama a função para exibir a primeira parte da tela de diagnósticos com nome, sexo, idade, altura e peso
+            // Chama a função para exibir a tela de diagnósticos
             TelaDiagnostico(nome, sexo, idade, altura, peso, imc);
 
             Espacos("_+");
@@ -75,17 +75,17 @@ namespace DesafioIMC
             bool validaSexo = false;
             do
             {
-                Console.Write("Insira o sexo do paciente (Masculino ou Feminino): ");
+                Console.Write("Insira o sexo do paciente (M para Masculino ou F para Feminino): ");
                 sexo = Console.ReadLine();
 
                 // Verifica a entrada convertendo a string para minúsculo e comparando com a string correspondente (masculino ou feminino)
                 // Caso não esteja de acordo, exibe uma mensagem e pede para o usuário digitar da maneira correta
-                if (sexo.ToLower() == "masculino")
+                if (sexo.ToLower() == "m")
                 {
                     sexo = "Masculino";
                     validaSexo = true;
                 }
-                else if (sexo.ToLower() == "feminino")
+                else if (sexo.ToLower() == "f")
                 {
                     sexo = "Feminino";
                     validaSexo = true;
@@ -97,7 +97,7 @@ namespace DesafioIMC
                     // Atribui a cor vermelha à fonte do console
                     Console.ForegroundColor = ConsoleColor.Red;
 
-                    Console.WriteLine("\nInsira apenas Masculino ou Feminino");
+                    Console.WriteLine("\nInsira apenas M para Masculino ou F para Feminino");
                     // Retorna a cor anterior à fonte do console
                     Console.ForegroundColor = color;
                 }
@@ -113,14 +113,7 @@ namespace DesafioIMC
                 validaIdade = int.TryParse(Console.ReadLine(), out idade);
 
                 // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                if (!validaIdade || idade <= 0)
-                {
-                    color = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nInforme uma idade válida. Maior ou igual a zero!");
-                    Console.ForegroundColor = color;
-                    validaIdade = false;
-                }
+                validaIdade = ValidaDados(validaIdade, idade);
             }
 
             // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
@@ -130,18 +123,12 @@ namespace DesafioIMC
             bool validaAltura = false;
             do
             {
-                Console.Write("Insira a altura do paciente: ");
+                Console.Write("Insira a altura do paciente em Metros: ");
                 validaAltura = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out altura);
 
                 // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                if (!validaAltura || altura <= 0)
-                {
-                    color = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nInforme uma altura válida e com valor maior ou igual a zero!");
-                    Console.ForegroundColor = color;
-                    validaAltura = false;
-                }
+                validaAltura = ValidaDados(validaAltura, altura);
+
             } while (!validaAltura);
 
 
@@ -152,22 +139,44 @@ namespace DesafioIMC
             bool validaPeso = false;
             do
             {
-                Console.Write("Insira o peso do paciente: ");
+                Console.Write("Insira o peso do paciente em Quilos: ");
                 validaPeso = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out peso);
 
                 // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                if (!validaPeso || peso < 0)
-                {
-                    color = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nInforme um peso válido e com valor maior ou igual a zero!");
-                    Console.ForegroundColor = color;
-                    validaPeso = false;
-                }
+                validaPeso = ValidaDados(validaPeso, peso);
+
             } while (!validaPeso);
 
             // Retorna um Array com todas as variáveis recebidas pelo usuário
+            // (Foi utilizado um array de object para poder retornar todos os dados sem a necessidade de conversão)
             return new object[] { nome, sexo, idade, altura, peso };
+        }
+
+        /// <summary>
+        /// Valida o dado recebido de acordo com a entrada digitada pelo usuário
+        /// </summary>
+        /// <param name="validaDado"></param>
+        /// <param name="dado"></param>
+        /// <returns>Retorna true ou false de acordo com o valor recebido</returns>
+        static bool ValidaDados(bool validaDado, double dado)
+        {
+            var color = Console.ForegroundColor;
+            if (!validaDado || dado <= 0)
+            {
+                // Recebe a cor atual da fonte do console
+                color = Console.ForegroundColor;
+
+                // Atribui a cor vermelha à fonte do console
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.WriteLine("\nInforme um dado válido apenas com números e com valor maior ou igual a zero!");
+
+                // Retorna a cor anterior à fonte do console
+                Console.ForegroundColor = color;
+
+                validaDado = false;
+            }
+            return validaDado;
         }
 
         /// <summary>
@@ -184,10 +193,10 @@ namespace DesafioIMC
             // Chama a função IdentificaCategoria passando a idade da pessoa e retornando uma string de acordo com a faixa etária.
             string categoria = IdentificaCategoria(idade);
 
-            // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como parâmetro da função.
+            // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como argumento da função.
             string riscos = CalculaRiscos(imc);
 
-            // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como parâmetro da função.
+            // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como argumento da função.
             string recomendacoesIniciais = CalculaRecomendacao(imc);
 
             string imcDesejavel = "Entre 20 e 24";
@@ -199,6 +208,7 @@ namespace DesafioIMC
             var color = Console.ForegroundColor;
 
             // Monta a tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
+
             // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
 
@@ -218,8 +228,8 @@ namespace DesafioIMC
             Console.WriteLine($"Categoria: \t{categoria}");
             Console.WriteLine($"\nIMC Desejável: \t{imcDesejavel}");
             Console.WriteLine($"Resultado IMC: \t{imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
-            Console.WriteLine($"Riscos: {riscos}");
-            Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
+            Console.WriteLine($"\nRiscos: {riscos}");
+            Console.WriteLine($"\nRecomendação inicial: {recomendacoesIniciais}");
         }
         
         /// <summary>
@@ -265,7 +275,37 @@ namespace DesafioIMC
         }
 
         /// <summary>
-        /// Função que calcula qual faixa de recomendação a pessoa se enquadra a partir do imc recebido como argumento
+        /// Função que calcula em qual risco a pessoa se enquadra a partir do imc recebido como parâmetro
+        /// </summary>
+        /// <param name="imc"></param>
+        /// <returns>Retorna uma string com o Risco de acordo com o imc fornecido</returns>
+        static string CalculaRiscos(double imc)
+        {
+            // Verifica em qual Risco se enquadra o imc recebido como parâmetro
+            if (imc < 20)
+            {
+                return "Inclua carboidratos simples em sua dieta, além de proteínas indispensáveis para ganho de massa magra. \nProcure um profissional.";
+            }
+            else if (imc >= 20 && imc < 25)
+            {
+                return "Mantenha uma dieta saudável e faça seus exames periódicos.";
+            }
+            else if (imc >= 25 && imc < 30)
+            {
+                return "Adote um tratamento baseado em dieta balanceada, exercício físico e medicação. \nA ajuda de um profissional pode ser interessante";
+            }
+            else if (imc >= 30 && imc < 35)
+            {
+                return "Adote uma dieta alimentar rigorosa, com o acompanhamento de um nutricionista \ne de um médico especialista (endócrino).";
+            }
+            else
+            {
+                return "Procure com urgência o acompanhamento de um nutricionista para realizar reeducação alimentar, \num psicólogo e um médico especialista (endócrino).";
+            }
+        }
+
+        /// <summary>
+        /// Função que calcula qual faixa de recomendação a pessoa se enquadra a partir do imc recebido como parâmetro
         /// </summary>
         /// <param name="imc"></param>
         /// <returns>Retorna uma string com a Recomendação de acordo com o imc fornecido</returns>
@@ -275,7 +315,7 @@ namespace DesafioIMC
 
             if (imc < 20)
             {
-                return "Muitas complicações de saúde como doenças pulmonares e cardiovasculares podem estar associadas ao baixo peso.";
+                return "Muitas complicações de saúde como doenças pulmonares e cardiovasculares \npodem estar associadas ao baixo peso.";
             }
             else if (imc >= 20 && imc < 25)
             {
@@ -283,7 +323,7 @@ namespace DesafioIMC
             }
             else if (imc >= 25 && imc < 30)
             {
-                return "Aumento de peso apresenta risco moderado para outras doenças crônicas e cardiovasculares.";
+                return "Aumento de peso apresenta risco moderado \npara outras doenças crônicas e cardiovasculares.";
             }
             else if (imc >= 30 && imc < 35)
             {
@@ -295,35 +335,7 @@ namespace DesafioIMC
             }
         }
 
-        /// <summary>
-        /// Função que calcula em qual risco a pessoa se enquadra a partir do imc recebido como argumento
-        /// </summary>
-        /// <param name="imc"></param>
-        /// <returns>Retorna uma string com o Risco de acordo com o imc fornecido</returns>
-        static string CalculaRiscos(double imc)
-        {
-            // Verifica em qual Risco se enquadra o imc recebido como argumento
-            if (imc < 20)
-            {
-                return "Inclua carboidratos simples em sua dieta, além de proteínas indispensáveis para ganho de massa magra. Procure um profissional.";
-            }
-            else if (imc >= 20 && imc < 25)
-            {
-                return "Mantenha uma dieta saudável e faça seus exames periódicos.";
-            }
-            else if (imc >= 25 && imc < 30)
-            {
-                return "Adote um tratamento baseado em dieta balanceada, exercício físico e medicação. A ajuda de um profissional pode ser interessante";
-            }
-            else if (imc >= 30 && imc < 35)
-            {
-                return "Adote uma dieta alimentar rigorosa, com o acompanhamento de um nutricionista e um médico especialista(endócrino).";
-            }
-            else
-            {
-                return "Procure com urgência o acompanhamento de um nutricionista para realizar reeducação alimentar, um psicólogo e um médicoespecialista(endócrino).";
-            }
-        }
+       
         
         /// <summary>
         /// Função para escolher se quer voltar à tela inicial ou se quer sair do programa
