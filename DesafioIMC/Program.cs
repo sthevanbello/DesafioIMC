@@ -126,15 +126,15 @@ namespace DesafioIMC
             do
             {
                 Console.Write("Insira a altura do paciente em Metros: ");
-                validaAltura = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out altura);
+                // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
+                altura = ConversaoDouble(Console.ReadLine());
 
                 // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                // Chama a função ValidaDados passando o resultado do TryParse e a altura inserida. 
+                // Chama a função ValidaDados passando a comparação da altura com o zero (garantir que não seja valor zero) e a altura inserida. 
                 // Retorna true para a variável se o valor inserido for válido
-                validaAltura = ValidaDados(validaAltura, altura);
+                validaAltura = ValidaDados(altura != 0, altura);
 
             } while (!validaAltura);
-
 
             // Recebimento do peso em double para considerar as casas decimais.
             // Faz a validação do dado recebido e força a cultura "pt-br" para trabalhar tanto com vírgula, quanto com ponto.
@@ -144,12 +144,13 @@ namespace DesafioIMC
             do
             {
                 Console.Write("Insira o peso do paciente em Quilos: ");
-                validaPeso = double.TryParse(Console.ReadLine().Replace(",", ".").ToString(CultureInfo.GetCultureInfo("pt-br")), out peso);
+                // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
+                peso = ConversaoDouble(Console.ReadLine());
 
                 // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                // Chama a função ValidaDados passando o resultado do TryParse e o peso inserido. 
+                // Chama a função ValidaDados passando a comparação do peso com o zero (garantir que não seja valor zero) e o peso inserido. 
                 // Retorna true para a variável se o valor inserido for válido
-                validaPeso = ValidaDados(validaPeso, peso);
+                validaPeso = ValidaDados(peso != 0, peso);
 
             } while (!validaPeso);
 
@@ -183,6 +184,19 @@ namespace DesafioIMC
                 validaDado = false;
             }
             return validaDado;
+        }
+
+        /// <summary>
+        /// Converte a string valor para double usando separador de casas decimais com ponto ou com vírgula
+        /// </summary>
+        /// <param name="valor"></param>
+        /// <returns>Retorna um valor string convertido para double</returns>
+        static double ConversaoDouble(string valor)
+        {
+            // Faz a conversão para double da string valor recebida como argumento  da função
+            // Verifica se é utilizada a vírgula ou o ponto
+            double.TryParse(valor.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out double valorDouble);
+            return valorDouble;
         }
 
         /// <summary>
@@ -416,5 +430,6 @@ namespace DesafioIMC
             Console.ForegroundColor = color;
             Console.WriteLine("\n");
         }
+
     }
 }
