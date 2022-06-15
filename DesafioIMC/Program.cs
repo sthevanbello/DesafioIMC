@@ -16,11 +16,14 @@ namespace DesafioIMC
         /// </summary>
         static void TelaInicial()
         {
+            var color = Console.ForegroundColor;
             // Limpa a tela
             Console.Clear();
             // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
+            Console.ForegroundColor = color;
             Espacos("=-");
 
             // Chamada da função que retorna os valores inseridos pelo usuário (nome, sexo, idade, altura e peso)
@@ -51,6 +54,7 @@ namespace DesafioIMC
         /// <returns>Retorna um Array com os dados informados</returns>
         static object[] EntradaDeDados()
         {
+            var color = Console.ForegroundColor;
             // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter"
             string nome = "";
             do
@@ -84,7 +88,10 @@ namespace DesafioIMC
                 }
                 else
                 {
+                    color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nInsira apenas Masculino ou Feminino");
+                    Console.ForegroundColor = color;
                 }
             } while (!validaSexo);
 
@@ -100,7 +107,10 @@ namespace DesafioIMC
                 // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 if (!validaIdade || idade <= 0)
                 {
+                    color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nInforme uma idade válida. Maior ou igual a zero!");
+                    Console.ForegroundColor = color;
                     validaIdade = false;
                 }
             }
@@ -118,7 +128,10 @@ namespace DesafioIMC
                 // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 if (!validaAltura || altura <= 0)
                 {
+                    color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nInforme uma altura válida e com valor maior ou igual a zero!");
+                    Console.ForegroundColor = color;
                     validaAltura = false;
                 }
             } while (!validaAltura);
@@ -137,7 +150,10 @@ namespace DesafioIMC
                 // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 if (!validaPeso || peso < 0)
                 {
+                    color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nInforme um peso válido e com valor maior ou igual a zero!");
+                    Console.ForegroundColor = color;
                     validaPeso = false;
                 }
             } while (!validaPeso);
@@ -171,20 +187,23 @@ namespace DesafioIMC
             // Limpa o console
             Console.Clear();
 
+            var color = Console.ForegroundColor;
             // Monta a tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
             // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
             Espacos("=-");
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
-            Console.WriteLine($"Nome: {nome}");
-            Console.WriteLine($"Sexo: {sexo}");
-            Console.WriteLine($"Idade: {idade} anos");
-            Console.WriteLine($"Altura: {altura.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}m");
-            Console.WriteLine($"Peso: {peso.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}Kg");
-            Console.WriteLine($"Categoria: {categoria}");
-            Console.WriteLine($"\nIMC Desejável: {imcDesejavel}");
-            Console.WriteLine($"Resultado IMC: {imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
+            Console.ForegroundColor = color;
+            Console.WriteLine($"Nome: \t\t{nome}");
+            Console.WriteLine($"Sexo: \t\t{sexo}");
+            Console.WriteLine($"Idade: \t\t{idade} anos");
+            Console.WriteLine($"Altura: \t{altura.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}m");
+            Console.WriteLine($"Peso: \t\t{peso.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}Kg");
+            Console.WriteLine($"Categoria: \t{categoria}");
+            Console.WriteLine($"\nIMC Desejável: \t{imcDesejavel}");
+            Console.WriteLine($"Resultado IMC: \t{imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
             Console.WriteLine($"Riscos: {riscos}");
             Console.WriteLine($"Recomendação inicial: {recomendacoesIniciais}");
         }
@@ -298,7 +317,10 @@ namespace DesafioIMC
         static void TelaDeDecisaoFinal()
         {
             bool fim = false;
+            var color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Insira a opção desejada\n");
+            Console.ForegroundColor = color;
             Console.WriteLine("Opção 1 - Voltar à tela inicial");
             Console.WriteLine("Opção 2 - Sair do programa");
             Espacos(".*");
@@ -320,9 +342,20 @@ namespace DesafioIMC
                     }
                     else
                     {
+                        color = Console.ForegroundColor;
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\nDigite uma opção válida");
+                        Console.ForegroundColor = color;
                     }
                 }
+                else
+                {
+                    color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nDigite uma opção válida");
+                    Console.ForegroundColor = color;
+                }
+
             }
         }
         
