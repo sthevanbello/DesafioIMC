@@ -87,7 +87,7 @@ namespace DesafioIMC
                 }
                 else if (sexo.ToLower() == "feminino")
                 {
-                    sexo = "Masculino";
+                    sexo = "Feminino";
                     validaSexo = true;
                 }
                 else
