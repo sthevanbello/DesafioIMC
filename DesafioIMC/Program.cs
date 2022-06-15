@@ -16,13 +16,16 @@ namespace DesafioIMC
         /// </summary>
         static void TelaInicial()
         {
+            // Recebe a cor atual da fonte do console
             var color = Console.ForegroundColor;
             // Limpa a tela
             Console.Clear();
             // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
+            // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
+            // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
             Espacos("=-");
 
@@ -54,6 +57,7 @@ namespace DesafioIMC
         /// <returns>Retorna um Array com os dados informados</returns>
         static object[] EntradaDeDados()
         {
+            // Recebe a cor atual das letras do console
             var color = Console.ForegroundColor;
             // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter"
             string nome = "";
@@ -88,9 +92,13 @@ namespace DesafioIMC
                 }
                 else
                 {
+                    // Recebe a cor atual da fonte do console
                     color = Console.ForegroundColor;
+                    // Atribui a cor vermelha à fonte do console
                     Console.ForegroundColor = ConsoleColor.Red;
+
                     Console.WriteLine("\nInsira apenas Masculino ou Feminino");
+                    // Retorna a cor anterior à fonte do console
                     Console.ForegroundColor = color;
                 }
             } while (!validaSexo);
@@ -187,14 +195,20 @@ namespace DesafioIMC
             // Limpa o console
             Console.Clear();
 
+            // Recebe a cor atual da fonte do console
             var color = Console.ForegroundColor;
+
             // Monta a tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
             // Função Espacos serve para gerar uma linha divisória
             Espacos("_+");
+
+            // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
+
             Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
             Espacos("=-");
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
+            // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
             Console.WriteLine($"Nome: \t\t{nome}");
             Console.WriteLine($"Sexo: \t\t{sexo}");
@@ -316,8 +330,8 @@ namespace DesafioIMC
         /// </summary>
         static void TelaDeDecisaoFinal()
         {
-            bool fim = false;
             var color = Console.ForegroundColor;
+            bool fim = false;
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Insira a opção desejada\n");
             Console.ForegroundColor = color;
