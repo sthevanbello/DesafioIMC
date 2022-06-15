@@ -9,9 +9,6 @@ namespace DesafioIMC
         {
             // Chamada da função da Tela Inicial para iniciar a inserção de dados 
             TelaInicial();
-
-            // Término do programa ou voltar à tela inicial para inserir novos dados
-            TelaDeDecisaoFinal();
         }
 
         /// <summary>
@@ -43,6 +40,9 @@ namespace DesafioIMC
             TelaDiagnostico(nome, sexo, idade, altura, peso, imc);
 
             Espacos("_+");
+
+            // Término do programa ou voltar à tela inicial para inserir novos dados
+            TelaDeDecisaoFinal();
         }
 
         /// <summary>
@@ -305,8 +305,8 @@ namespace DesafioIMC
             while (!fim)
             {
                 Console.Write("Opção: ");
-                var escolha = 0;
-                var digitou = int.TryParse(Console.ReadLine(), out escolha);
+                int escolha = 0;
+                bool digitou = int.TryParse(Console.ReadLine(), out escolha);
 
                 if (digitou)
                 {
