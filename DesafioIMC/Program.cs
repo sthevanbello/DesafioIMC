@@ -16,18 +16,8 @@ namespace DesafioIMC
         /// </summary>
         static void TelaInicial()
         {
-            // Recebe a cor atual da fonte do console
-            var color = Console.ForegroundColor;
-            // Limpa a tela
-            Console.Clear();
-            // Função Espacos serve para gerar uma linha divisória
-            Espacos("_+");
-            // Atribui a cor azul à fonte do console
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
-            // Retorna a cor anterior à fonte do console
-            Console.ForegroundColor = color;
-            Espacos("=-");
+            // Chama a função para imprimir o cabeçalho padrão das telas
+            Cabecalho();
 
             // Chamada da função que retorna os valores inseridos pelo usuário (nome, sexo, idade, altura e peso)
             var dadosDiagnostico = EntradaDeDados();
@@ -52,11 +42,16 @@ namespace DesafioIMC
         }
 
         /// <summary>
-        /// Entrada dos dados informados pelo usuário
+        /// Entrada dos dados informados pelo usuário e monstagem da tela de triagem dinamicamente
         /// </summary>
         /// <returns>Retorna um Array com os dados informados</returns>
         static object[] EntradaDeDados()
         {
+            //Monta o cabeçalho inicial da tela
+            Cabecalho();
+            // Monta a tela inicial dinamicamente
+            DadosIniciaisPaciente();
+
             // Recebe a cor atual das letras do console
             var color = Console.ForegroundColor;
             // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter"
@@ -66,8 +61,17 @@ namespace DesafioIMC
                 Console.Write("Insira o nome completo do paciente: ");
                 nome = Console.ReadLine();
 
+                if (string.IsNullOrWhiteSpace(nome))
+                {
+                    MensagemErro();
+                }
+            // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só digitado "Enter" ou apenas espaços vazios.
             } while (string.IsNullOrWhiteSpace(nome));
 
+            // Limpa a tela
+            Console.Clear();
+            Cabecalho();
+            DadosIniciaisPaciente(nome);
 
             // Recebe o sexo da pessoa e verifica se é um sexo válido
             // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
@@ -103,8 +107,11 @@ namespace DesafioIMC
                 }
             } while (!validaSexo);
 
+            Console.Clear();
+            Cabecalho();
+            DadosIniciaisPaciente(nome, sexo);
+
             // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais) 
-            // Usando o método While
             int idade = 0;
             bool validaIdade = false;
             while (!validaIdade)
@@ -115,42 +122,48 @@ namespace DesafioIMC
                 // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 // Chama a função ValidaDados passando o resultado do TryParse e a idade inserida. 
                 // Retorna true para a variável se o valor inserido for válido
-                validaIdade = ValidaDados(validaIdade, idade);
+                validaIdade = ValidaDados(validaIdade, idade, "idade");
             }
 
+            Console.Clear();
+            Cabecalho();
+            DadosIniciaisPaciente(nome, sexo, idade);
+
             // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
-            // Faz a validação do dado recebido e força a cultura "pt-br" para trabalhar tanto com vírgula, quanto com ponto.
-            // Faz a validação também se foi digitado algo que não seja um número
             double altura = 0;
             bool validaAltura = false;
             do
             {
-                Console.Write("Insira a altura do paciente em Metros: ");
+                Console.Write("Insira a altura do paciente em Metros - exemplo: 1,75: ");
                 // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
                 altura = ConversaoDouble(Console.ReadLine());
 
                 // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 // Chama a função ValidaDados passando a comparação da altura com o zero (garantir que não seja valor zero) e a altura inserida. 
                 // Retorna true para a variável se o valor inserido for válido
-                validaAltura = ValidaDados(altura != 0, altura);
+
+                validaAltura = ValidaDados(altura != 0, altura, "altura");
 
             } while (!validaAltura);
 
+            Console.Clear();
+            Cabecalho();
+            DadosIniciaisPaciente(nome, sexo, idade, altura);
+
             // Recebimento do peso em double para considerar as casas decimais.
-            // Faz a validação do dado recebido e força a cultura "pt-br" para trabalhar tanto com vírgula, quanto com ponto.
-            // Faz a validação também se foi digitado algo que não seja um número 
             double peso = 0;
             bool validaPeso = false;
             do
             {
-                Console.Write("Insira o peso do paciente em Quilos: ");
+                Console.Write("Insira o peso do paciente em Quilos - exemplo: 65,5: ");
                 // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
                 peso = ConversaoDouble(Console.ReadLine());
 
                 // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                 // Chama a função ValidaDados passando a comparação do peso com o zero (garantir que não seja valor zero) e o peso inserido. 
                 // Retorna true para a variável se o valor inserido for válido
-                validaPeso = ValidaDados(peso != 0, peso);
+
+                validaPeso = ValidaDados(peso != 0, peso, "peso");
 
             } while (!validaPeso);
 
@@ -165,18 +178,17 @@ namespace DesafioIMC
         /// <param name="validaDado"></param>
         /// <param name="dado"></param>
         /// <returns>Retorna true ou false de acordo com o valor recebido</returns>
-        static bool ValidaDados(bool validaDado, double dado)
+        static bool ValidaDados(bool validaDado, double dado, string tipo)
         {
+            // Recebe a cor atual da fonte do console
             var color = Console.ForegroundColor;
+
             if (!validaDado || dado <= 0)
             {
-                // Recebe a cor atual da fonte do console
-                color = Console.ForegroundColor;
-
                 // Atribui a cor vermelha à fonte do console
                 Console.ForegroundColor = ConsoleColor.Red;
 
-                Console.WriteLine("\nInforme um dado válido apenas com números e com valor maior ou igual a zero!");
+                Console.WriteLine($"\nInforme um dado válido para {tipo} apenas com números e com valor maior ou igual a zero!");
 
                 // Retorna a cor anterior à fonte do console
                 Console.ForegroundColor = color;
@@ -195,6 +207,10 @@ namespace DesafioIMC
         {
             // Faz a conversão para double da string valor recebida como argumento  da função
             // Verifica se é utilizada a vírgula ou o ponto
+            // valor.Replace(",", ".") Faz a troca da vírgula por ponto, para não haver erro na conversão
+            // NumberStyles.Number determina que o estilo permitido é número
+
+            // CultureInfo.InvariantCulture considera apenas o idioma padrão do Windows (inglês) e não o idioma do Windows instalado
             double.TryParse(valor.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out double valorDouble);
             return valorDouble;
         }
@@ -226,32 +242,36 @@ namespace DesafioIMC
 
             // Recebe a cor atual da fonte do console
             var color = Console.ForegroundColor;
+            var colorCampos = ConsoleColor.Yellow;
 
             // Monta a tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
-
-            // Função Espacos serve para gerar uma linha divisória
-            Espacos("_+");
-
-            // Atribui a cor azul à fonte do console
+            Cabecalho();
             Console.ForegroundColor = ConsoleColor.Blue;
-
-            Console.WriteLine("Cálculo de IMC Para Diagnóstico Prévio");
-            Espacos("=-");
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
             // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
-            Console.WriteLine($"Nome: \t\t{nome}");
-            Console.WriteLine($"Sexo: \t\t{sexo}");
-            Console.WriteLine($"Idade: \t\t{idade} anos");
-            Console.WriteLine($"Altura: \t{altura.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}m");
-            Console.WriteLine($"Peso: \t\t{peso.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}Kg");
-            Console.WriteLine($"Categoria: \t{categoria}");
-            Console.WriteLine($"\nIMC Desejável: \t{imcDesejavel}");
-            Console.WriteLine($"Resultado IMC: \t{imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}");
+
+            DadosIniciaisPaciente(nome, sexo, idade, altura, peso);
+
+            Console.Write($"Categoria: \t");
+            Console.ForegroundColor = colorCampos;
+            Console.Write($"{categoria}\n");
+            Console.ResetColor();
+
+            Console.Write($"\nIMC Desejável: \t");
+            Console.ForegroundColor = colorCampos;
+            Console.Write($"{imcDesejavel}\n");
+            Console.ResetColor();
+
+            Console.Write($"\nResultado IMC: \t");
+            Console.ForegroundColor = colorCampos;
+            Console.Write($"{imc.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}\n");
+            Console.ResetColor();
+
             Console.WriteLine($"\nRiscos: {riscos}");
             Console.WriteLine($"\nRecomendação inicial: {recomendacoesIniciais}");
         }
-        
+
         /// <summary>
         /// Recebe o parâmetro "idade" e faz a conferência para retornar a categoria em que a pessoa se encontra.
         /// </summary>
@@ -356,6 +376,116 @@ namespace DesafioIMC
         }
 
         /// <summary>
+        /// Monta o cabeçalho padrão das telas
+        /// </summary>
+        static void Cabecalho()
+        {
+            // Recebe a cor atual da fonte do console
+            var color = Console.ForegroundColor;
+            // Limpa a tela
+            Console.Clear();
+            // Função Espacos serve para gerar uma linha divisória
+            Espacos("_+");
+            // Atribui a cor azul à fonte do console
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(75)) ;
+            // Retorna a cor anterior à fonte do console
+            Console.ForegroundColor = color;
+            Espacos("=-");
+        }
+
+        /// <summary>
+        /// Monta a tela inicial dinamicamente a cada inserção dos dados do paciente.
+        /// Caso não haja dado inserido, monta a tela apenas com os títulos dos dados.
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <param name="sexo"></param>
+        /// <param name="idade"></param>
+        /// <param name="altura"></param>
+        /// <param name="peso"></param>
+        private static void DadosIniciaisPaciente(string nome = "", string sexo = "", int idade = 0, double altura = 0D, double peso = 0D)
+        {
+            var color = Console.ForegroundColor;
+            if (peso <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("TRIAGEM DO PACIENTE\n");
+            }
+
+            // Preenche dinamicamente a tela conforme os valores forem digitados pelo usuário
+            Console.ForegroundColor = color;
+            CamposTexto("Nome", nome);
+            CamposTexto("Sexo", sexo);
+            CamposNumeroInt("Idade", idade);
+            CamposNumeroDouble("Altura", altura);
+            CamposNumeroDouble("Peso", peso);
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Preenche dinamicamente os campos de texto na tela inicial de triagem do paciente
+        /// </summary>
+        /// <param name="tipo"></param>
+        /// <param name="dado"></param>
+        static void CamposTexto(string tipo, string dado)
+        {
+            var color = Console.ForegroundColor;
+            var colorCampos = ConsoleColor.Yellow;
+            string dadoApresentado;
+            // Preenche o título do dado
+            Console.Write($"{tipo}:\t\t");
+            Console.ForegroundColor = colorCampos;
+
+            // Preenche o dado após apertar o ENTER caso esteja correto (Não seja apenas espaço em branco ou apenas apertar ENTER) 
+            if (!string.IsNullOrWhiteSpace(dado))
+                dadoApresentado = dado;
+            else
+                dadoApresentado = "";
+            Console.Write($"{dadoApresentado}\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Preenche dinamicamente os dados do tipo Double na tela de triagem do paciente
+        /// </summary>
+        /// <param name="tipo"></param>
+        /// <param name="dado"></param>
+        private static void CamposNumeroDouble(string tipo, double dado)
+        {
+            var color = Console.ForegroundColor;
+            var colorCampos = ConsoleColor.Yellow;
+            string dadoApresentado = "";
+            string unidade = "";
+            Console.Write($"{tipo}:\t\t");
+            Console.ForegroundColor = colorCampos;
+            if (tipo == "Altura")
+                unidade = "m";
+            if (tipo == "Peso")
+                unidade = "Kg";
+            if (dado > 0)
+                dadoApresentado = $"{dado.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}{unidade}";
+            else
+                dadoApresentado = "";
+            Console.Write($"{dadoApresentado}\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Preenche dinamicamente a idade na tela inicial de triagem do paciente
+        /// </summary>
+        /// <param name="tipo"></param>
+        /// <param name="dado"></param>
+        static void CamposNumeroInt(string tipo, int dado)
+        {
+            var color = Console.ForegroundColor;
+            var colorCampos = ConsoleColor.Yellow;
+            Console.Write($"{tipo}:\t\t");
+            Console.ForegroundColor = colorCampos;
+            Console.Write($"{(dado > 0 ? $"{dado} anos" : "")}\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
         /// Função para escolher se quer voltar à tela inicial ou se quer sair do programa
         /// </summary>
         static void TelaDeDecisaoFinal()
@@ -399,10 +529,26 @@ namespace DesafioIMC
                     Console.WriteLine("\nDigite uma opção válida");
                     Console.ForegroundColor = color;
                 }
-
             }
         }
-        
+
+        /// <summary>
+        /// Exibe uma mensagem de erro com destaque na cor da fonte
+        /// </summary>
+        static void MensagemErro()
+        {
+            // Recebe a cor atual da fonte do console
+            var color = Console.ForegroundColor;
+
+            // Atribui a cor vermelha à fonte do console
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine("\nInforme um dado válido e não aperte apenas ENTER");
+
+            // Retorna a cor anterior à fonte do console
+            Console.ForegroundColor = color;
+        }
+
         /// <summary>
         /// Função para sair do programa
         /// </summary>
@@ -422,14 +568,11 @@ namespace DesafioIMC
         {
             var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine();
-            for (int i = 0; i < Console.WindowWidth/simbolo.Length; i++)
+            for (int i = 0; i < Console.WindowWidth / simbolo.Length; i++)
             {
                 Console.Write(simbolo);
             }
             Console.ForegroundColor = color;
-            Console.WriteLine("\n");
         }
-
     }
 }
