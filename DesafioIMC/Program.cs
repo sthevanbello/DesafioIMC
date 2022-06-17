@@ -32,9 +32,10 @@ namespace DesafioIMC
             // Chamada da função para calcular o IMC e retornar o valor do IMC como double, considerando as casas decimais.
             double imc = CalculaImc(peso, altura);
 
-            // Chama a função para exibir a tela de diagnósticos
+            // Chama a função para exibir a tela de diagnósticos prévio
             TelaDiagnostico(nome, sexo, idade, altura, peso, imc);
 
+            // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
             Espacos("_+");
 
             // Término do programa ou voltar à tela inicial para inserir novos dados
@@ -42,11 +43,14 @@ namespace DesafioIMC
         }
 
         /// <summary>
-        /// Entrada dos dados informados pelo usuário e monstagem da tela de triagem dinamicamente
+        /// Entrada dos dados informados pelo usuário e apresentação da tela de "Triagem" dinamicamente
         /// </summary>
-        /// <returns>Retorna um Array com os dados informados</returns>
+        /// <returns>Retorna um Array contendo os dados informados</returns>
         static object[] EntradaDeDados()
         {
+            // Este trecho é utilizado em mais pontos do código e serve para apresentar dinamicamente a tela inicial de triagem do paciente
+            // Limpa a tela
+            Console.Clear();
             //Monta o cabeçalho inicial da tela
             Cabecalho();
             // Monta a tela inicial dinamicamente
@@ -67,7 +71,6 @@ namespace DesafioIMC
                 }
             } while (string.IsNullOrWhiteSpace(nome)); // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só apertada a tecla "Enter" ou apenas espaços vazios.
 
-            // Limpa a tela
             Console.Clear();
             Cabecalho();
             DadosIniciaisPaciente(nome);
@@ -185,16 +188,15 @@ namespace DesafioIMC
 
             if (tipo == "idade")
             {
-                if (!validaDado || dado < 0 || dado >= 120)
+                if (!validaDado || dado < 1 || dado > 120)
                 {
-                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo Informe um valor entre 0 e 120 anos";
+                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo - Informe um valor entre 1 e 120 anos";
                     validaDado = false;
                 }
-               
             }
             if (tipo == "altura")
             {
-                if (!validaDado || dado == 0 || dado <= 0.3 || dado >= 2.6)
+                if (!validaDado || dado == 0 || dado < 0.3 || dado > 2.6)
                 {
                     mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo - Informe um valor entre 0,3m e 2,6m";
                     validaDado = false;
@@ -202,7 +204,7 @@ namespace DesafioIMC
             }
             if (tipo == "peso")
             {
-                if (!validaDado || dado <= 1 || dado >= 250)
+                if (!validaDado || dado < 1 || dado > 250)
                 {
                     mensagem = $"\nInforme um {tipo} válido apenas com números e entre 1kg e 250kg";
                     validaDado = false;
@@ -447,7 +449,7 @@ namespace DesafioIMC
             Espacos("_+");
             // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(75));
+            Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(78, ' '));
             // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
             Espacos("=-");
@@ -515,15 +517,16 @@ namespace DesafioIMC
         {
             var color = Console.ForegroundColor;
             var colorCampos = ConsoleColor.Yellow;
-            string dadoApresentado = "";
             string unidade = "";
             Console.Write($"{tipo}:\t\t");
             Console.ForegroundColor = colorCampos;
+            string dadoApresentado = "";
+            // Se o tipo de dado a ser apresentado for altura, utiliza-se a grandeza m e se for peso utiliza-se a grandeza kq ao final da string "dadoApresentado" 
             if (tipo == "Altura")
                 unidade = "m";
             if (tipo == "Peso")
                 unidade = "Kg";
-            if (dado > 0)
+            if (dado > 0) // Só preenche dadoApresentado na tela de triagem se o dado for maior do que zero, ou seja, quando é preenchido um dado válido.
                 dadoApresentado = $"{dado.ToString("N2", CultureInfo.GetCultureInfo("pt-br"))}{unidade}";
             else
                 dadoApresentado = "";
@@ -540,9 +543,10 @@ namespace DesafioIMC
         {
             var color = Console.ForegroundColor;
             var colorCampos = ConsoleColor.Yellow;
-            string dadoApresentado;
             Console.Write($"{tipo}:\t\t");
             Console.ForegroundColor = colorCampos;
+            string dadoApresentado;
+            // Se o tipo de dado a ser apresentado for maior ou igual a zero, apresenta o dado dinamicamente na tela de triagem
             if (dado >= 0)
                 dadoApresentado = $"{dado} anos";
             else
@@ -651,5 +655,6 @@ namespace DesafioIMC
             Console.WriteLine("Até mais!");
             Environment.Exit(0);
         }
+
     }
 }
