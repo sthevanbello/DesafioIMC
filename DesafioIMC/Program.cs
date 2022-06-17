@@ -494,6 +494,9 @@ namespace DesafioIMC
             Console.Write($"{tipo}:\t\t");
             Console.ForegroundColor = colorCampos;
 
+            // Função utilizada para deixar a primeira letra do nome em maiúsculo
+            dado = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(dado.ToLower()); 
+
             // Preenche o dado após apertar o ENTER caso esteja correto (Não seja apenas espaço em branco ou apenas apertar ENTER) 
             if (!string.IsNullOrWhiteSpace(dado))
                 dadoApresentado = dado;
