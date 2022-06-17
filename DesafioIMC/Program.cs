@@ -51,28 +51,27 @@ namespace DesafioIMC
             Cabecalho();
             // Monta a tela inicial dinamicamente
             DadosIniciaisPaciente();
-
+            Espacos("__");
             // Recebe a cor atual das letras do console
             var color = Console.ForegroundColor;
-            // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter"
+
             string nome = "";
             do
-            {
+            {   // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter".
                 Console.Write("Insira o nome completo do paciente: ");
-                nome = Console.ReadLine();
+                nome = Console.ReadLine().Trim(); // Função Trim() serve para retirar os espaços em branco para verificar se a entrada de texto está vazia.
 
-                if (string.IsNullOrWhiteSpace(nome))
+                if (nome == "")
                 {
-                    MensagemErro();
+                    MensagemErro(); // Exibe uma mensagem de erro se o dado for inválido - Espaços em branco ou se foi só apertada a tecla "Enter".
                 }
-            // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só digitado "Enter" ou apenas espaços vazios.
-            } while (string.IsNullOrWhiteSpace(nome));
+            } while (string.IsNullOrWhiteSpace(nome)); // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só apertada a tecla "Enter" ou apenas espaços vazios.
 
             // Limpa a tela
             Console.Clear();
             Cabecalho();
             DadosIniciaisPaciente(nome);
-
+            Espacos("__");
             // Recebe o sexo da pessoa e verifica se é um sexo válido
             // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
             string sexo = "";
@@ -110,7 +109,7 @@ namespace DesafioIMC
             Console.Clear();
             Cabecalho();
             DadosIniciaisPaciente(nome, sexo);
-
+            Espacos("__");
             // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais) 
             int idade = 0;
             bool validaIdade = false;
@@ -128,13 +127,13 @@ namespace DesafioIMC
             Console.Clear();
             Cabecalho();
             DadosIniciaisPaciente(nome, sexo, idade);
-
+            Espacos("__");
             // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
             double altura = 0;
             bool validaAltura = false;
             do
             {
-                Console.Write("Insira a altura do paciente em Metros - exemplo: 1,75: ");
+                Console.Write("Insira a altura do paciente em Metros - 1,65 - por exemplo: ");
                 // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
                 altura = ConversaoDouble(Console.ReadLine());
 
@@ -149,13 +148,13 @@ namespace DesafioIMC
             Console.Clear();
             Cabecalho();
             DadosIniciaisPaciente(nome, sexo, idade, altura);
-
+            Espacos("__");
             // Recebimento do peso em double para considerar as casas decimais.
             double peso = 0;
             bool validaPeso = false;
             do
             {
-                Console.Write("Insira o peso do paciente em Quilos - exemplo: 65,5: ");
+                Console.Write("Insira o peso do paciente em Quilos - 65,5 - por exemplo: ");
                 // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
                 peso = ConversaoDouble(Console.ReadLine());
 
@@ -182,19 +181,40 @@ namespace DesafioIMC
         {
             // Recebe a cor atual da fonte do console
             var color = Console.ForegroundColor;
+            string mensagem = "";
 
-            if (!validaDado || dado <= 0)
+            if (tipo == "idade")
             {
-                // Atribui a cor vermelha à fonte do console
-                Console.ForegroundColor = ConsoleColor.Red;
-
-                Console.WriteLine($"\nInforme um dado válido para {tipo} apenas com números e com valor maior ou igual a zero!");
-
-                // Retorna a cor anterior à fonte do console
-                Console.ForegroundColor = color;
-
-                validaDado = false;
+                if (!validaDado || dado < 0 || dado >= 120)
+                {
+                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo Informe um valor entre 0 e 120 anos";
+                    validaDado = false;
+                }
+               
             }
+            if (tipo == "altura")
+            {
+                if (!validaDado || dado == 0 || dado <= 0.3 || dado >= 2.6)
+                {
+                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo - Informe um valor entre 0,3m e 2,6m";
+                    validaDado = false;
+                }
+            }
+            if (tipo == "peso")
+            {
+                if (!validaDado || dado <= 1 || dado >= 250)
+                {
+                    mensagem = $"\nInforme um {tipo} válido apenas com números e entre 1kg e 250kg";
+                    validaDado = false;
+                }
+            }
+            // Atribui a cor vermelha à fonte do console
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine(mensagem);
+
+            // Retorna a cor anterior à fonte do console
+            Console.ForegroundColor = color;
             return validaDado;
         }
 
@@ -233,7 +253,7 @@ namespace DesafioIMC
             string riscos = CalculaRiscos(imc);
 
             // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como argumento da função.
-            string recomendacoesIniciais = CalculaRecomendacao(imc);
+            string recomendacoesIniciais = CalculaRecomendacoes(imc);
 
             string imcDesejavel = "Entre 20 e 24";
 
@@ -246,12 +266,17 @@ namespace DesafioIMC
 
             // Monta a tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
             Cabecalho();
+            DadosIniciaisPaciente(nome, sexo, idade, altura, peso);
+            Espacos("__");
+            // Chama a função para perguntar se os dados inseridos na triagem estão corretos
+            VerificaDadosCorretos();
+
+            Cabecalho();
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
             // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
-
-            DadosIniciaisPaciente(nome, sexo, idade, altura, peso);
+            DadosIniciaisPaciente(nome, sexo, idade, altura, peso, preenchido: true);
 
             Console.Write($"Categoria: \t");
             Console.ForegroundColor = colorCampos;
@@ -270,6 +295,40 @@ namespace DesafioIMC
 
             Console.WriteLine($"\nRiscos: {riscos}");
             Console.WriteLine($"\nRecomendação inicial: {recomendacoesIniciais}");
+        }
+
+        /// <summary>
+        /// Função de confirmação dos dados digitados na triagem. Dados corretos? S para Sim e N para Não
+        /// </summary>
+        static void VerificaDadosCorretos()
+        {
+            bool dadosCorretos = true;
+            do
+            {
+                Console.WriteLine("Os dados digitados estão todos corretos?\n");
+                Console.Write($"Digite ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"S para Sim");
+                Console.ResetColor();
+                Console.Write(" ou ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("N para Não");
+                Console.ResetColor();
+                Console.Write(": ");
+                string dados = Console.ReadLine().ToLower();
+                if (dados == "s")
+                {
+                    dadosCorretos = false;
+                }
+                else if (dados == "n")
+                {
+                    TelaInicial();
+                }
+                else
+                {
+                    MensagemErro();
+                }
+            } while (dadosCorretos);
         }
 
         /// <summary>
@@ -319,12 +378,12 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="imc"></param>
         /// <returns>Retorna uma string com o Risco de acordo com o imc fornecido</returns>
-        static string CalculaRiscos(double imc)
+        static string CalculaRecomendacoes(double imc)
         {
             // Verifica em qual Risco se enquadra o imc recebido como parâmetro
             if (imc < 20)
             {
-                return "Inclua carboidratos simples em sua dieta, além de proteínas indispensáveis para ganho de massa magra. \nProcure um profissional.";
+                return "Inclua carboidratos simples em sua dieta, além de proteínas indispensáveis para ganho de \nmassa magra. Procure um profissional.";
             }
             else if (imc >= 20 && imc < 25)
             {
@@ -340,7 +399,7 @@ namespace DesafioIMC
             }
             else
             {
-                return "Procure com urgência o acompanhamento de um nutricionista para realizar reeducação alimentar, \num psicólogo e um médico especialista (endócrino).";
+                return "Procure com urgência o acompanhamento de um nutricionista para realizar reeducação \nalimentar, um psicólogo e um médico especialista (endócrino).";
             }
         }
 
@@ -349,7 +408,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="imc"></param>
         /// <returns>Retorna uma string com a Recomendação de acordo com o imc fornecido</returns>
-        static string CalculaRecomendacao(double imc)
+        static string CalculaRiscos(double imc)
         {
             // Verifica em qual recomendação se enquadra o imc recebido como argumento
 
@@ -363,7 +422,7 @@ namespace DesafioIMC
             }
             else if (imc >= 25 && imc < 30)
             {
-                return "Aumento de peso apresenta risco moderado \npara outras doenças crônicas e cardiovasculares.";
+                return "Aumento de peso apresenta risco moderado para outras doenças crônicas e cardiovasculares.";
             }
             else if (imc >= 30 && imc < 35)
             {
@@ -388,7 +447,7 @@ namespace DesafioIMC
             Espacos("_+");
             // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(75)) ;
+            Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(75));
             // Retorna a cor anterior à fonte do console
             Console.ForegroundColor = color;
             Espacos("=-");
@@ -403,10 +462,10 @@ namespace DesafioIMC
         /// <param name="idade"></param>
         /// <param name="altura"></param>
         /// <param name="peso"></param>
-        private static void DadosIniciaisPaciente(string nome = "", string sexo = "", int idade = 0, double altura = 0D, double peso = 0D)
+        static void DadosIniciaisPaciente(string nome = "", string sexo = "", int idade = -1, double altura = 0D, double peso = 0D, bool preenchido = false)
         {
             var color = Console.ForegroundColor;
-            if (peso <= 0)
+            if (!preenchido)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("TRIAGEM DO PACIENTE\n");
@@ -419,7 +478,6 @@ namespace DesafioIMC
             CamposNumeroInt("Idade", idade);
             CamposNumeroDouble("Altura", altura);
             CamposNumeroDouble("Peso", peso);
-            Console.WriteLine();
         }
 
         /// <summary>
@@ -450,7 +508,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="tipo"></param>
         /// <param name="dado"></param>
-        private static void CamposNumeroDouble(string tipo, double dado)
+        static void CamposNumeroDouble(string tipo, double dado)
         {
             var color = Console.ForegroundColor;
             var colorCampos = ConsoleColor.Yellow;
@@ -479,9 +537,14 @@ namespace DesafioIMC
         {
             var color = Console.ForegroundColor;
             var colorCampos = ConsoleColor.Yellow;
+            string dadoApresentado;
             Console.Write($"{tipo}:\t\t");
             Console.ForegroundColor = colorCampos;
-            Console.Write($"{(dado > 0 ? $"{dado} anos" : "")}\n");
+            if (dado >= 0)
+                dadoApresentado = $"{dado} anos";
+            else
+                dadoApresentado = "";
+            Console.Write($"{dadoApresentado}\n");
             Console.ResetColor();
         }
 
@@ -490,13 +553,23 @@ namespace DesafioIMC
         /// </summary>
         static void TelaDeDecisaoFinal()
         {
+            Console.WriteLine();
             var color = Console.ForegroundColor;
             bool fim = false;
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Insira a opção desejada\n");
-            Console.ForegroundColor = color;
-            Console.WriteLine("Opção 1 - Voltar à tela inicial");
-            Console.WriteLine("Opção 2 - Sair do programa");
+            Console.ResetColor();
+            Console.Write("Digite ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("1 ");
+            Console.ResetColor();
+            Console.Write("- Para voltar à tela inicial\n");
+            Console.Write("Digite ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("2 ");
+            Console.ResetColor();
+            Console.Write("- Para sair do programa\n");
+
             Espacos(".*");
             while (!fim)
             {
@@ -550,17 +623,6 @@ namespace DesafioIMC
         }
 
         /// <summary>
-        /// Função para sair do programa
-        /// </summary>
-        static void Sair()
-        {
-            Espacos(".*");
-            Console.WriteLine("Opção selecionada: Sair");
-            Console.WriteLine("Até mais!");
-            Environment.Exit(0);
-        }
-
-        /// <summary>
         /// Cria uma linha de separação a partir de um símbolo em formato string
         /// </summary>
         /// <param name="simbolo"></param>
@@ -573,6 +635,18 @@ namespace DesafioIMC
                 Console.Write(simbolo);
             }
             Console.ForegroundColor = color;
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Função para sair do programa
+        /// </summary>
+        static void Sair()
+        {
+            Espacos(".*");
+            Console.WriteLine("\nOpção selecionada: Sair");
+            Console.WriteLine("Até mais!");
+            Environment.Exit(0);
         }
     }
 }
