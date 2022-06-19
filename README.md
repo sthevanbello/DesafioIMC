@@ -19,6 +19,8 @@ obesidade.
 
 ***IMC = Peso ÷ (Altura × Altura)*** 
  #### O que foi utilizado no projeto:
+  - Linguagem: C#;
+  - Versão do Framework: .NET 5.0 (Utilizada a mesma versão do curso).
   - Tratamento de possíveis erros de entrada de dados.
   - Separação em funções visando a obter uma melhor organização do código .
   - Comentários para identificar as responsabilidades de cada trecho do código para um melhor entendimento.
