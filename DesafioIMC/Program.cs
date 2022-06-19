@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 
 namespace DesafioIMC
 {
@@ -16,18 +17,22 @@ namespace DesafioIMC
         /// </summary>
         static void TelaInicial()
         {
-            // Chama a função para imprimir o cabeçalho padrão das telas
+            // Este trecho é utilizado em mais pontos do código e serve para apresentar dinamicamente a tela inicial de triagem do paciente
+            //Monta o cabeçalho inicial da tela
             Cabecalho();
-
-            // Chamada da função que retorna os valores inseridos pelo usuário (nome, sexo, idade, altura e peso)
-            var dadosDiagnostico = EntradaDeDados();
+            // Monta a tela inicial dinamicamente
+            DadosIniciaisPaciente();
+            // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
+            Espacos("__");
+            // Recebe a cor atual das letras do console
+            //var color = Console.ForegroundColor;
 
             //Preenchimento de variáveis recebidas pelo array de retorno do método de "EntradaDeDados"
-            string nome = (string)dadosDiagnostico[0];
-            string sexo = (string)dadosDiagnostico[1];
-            int idade = (int)dadosDiagnostico[2];
-            double altura = (double)dadosDiagnostico[3];
-            double peso = (double)dadosDiagnostico[4];
+            string nome = RecebeNome();
+            string sexo = RecebeSexo(nome);
+            int idade = RecebeIdade(nome, sexo);
+            double altura = RecebeAltura(nome, sexo, idade);
+            double peso = RecebePeso(nome, sexo, idade, altura);
 
             // Chamada da função para calcular o IMC e retornar o valor do IMC como double, considerando as casas decimais.
             double imc = CalculaImc(peso, altura);
@@ -43,125 +48,195 @@ namespace DesafioIMC
         }
 
         /// <summary>
-        /// Entrada dos dados informados pelo usuário e apresentação da tela de "Triagem" dinamicamente
+        /// <para>Função recebe os argumentos para montar dinamicamente a tela de triagem.</para>
+        /// <para>Recebe o nome do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
         /// </summary>
-        /// <returns>Retorna um Array contendo os dados informados</returns>
-        static object[] EntradaDeDados()
+        /// <returns>Retorna a <b>string</b> com o nome do paciente</returns>
+        static string RecebeNome()
         {
-            // Este trecho é utilizado em mais pontos do código e serve para apresentar dinamicamente a tela inicial de triagem do paciente
-            //Monta o cabeçalho inicial da tela
-            Cabecalho();
-            // Monta a tela inicial dinamicamente
-            DadosIniciaisPaciente();
-            // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-            Espacos("__");
-            // Recebe a cor atual das letras do console
-            var color = Console.ForegroundColor;
-
+            // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter".
             string nome = "";
+            bool dadoCorreto = false;
             do
-            {   // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter".
-                Console.Write("Insira o nome completo do paciente: ");
-                nome = Console.ReadLine().Trim(); // Função Trim() serve para retirar os espaços em branco para verificar se a entrada de texto está vazia.
+            {
+                //Monta o cabeçalho inicial da tela
+                Cabecalho();
+                // Monta a tela inicial dinamicamente
+                DadosIniciaisPaciente();
+                // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
+                Espacos("__");
+                do
+                {   
+                    Console.Write("Insira o nome completo do paciente: ");
+                    nome = Console.ReadLine().Trim(); // Função Trim() serve para retirar os espaços em branco para verificar se a entrada de texto está vazia.
 
-                if (nome == "")
-                {
-                    MensagemErro(); // Exibe uma mensagem de erro se o dado for inválido, se há somente espaços em branco ou se foi só apertada a tecla "Enter".
-                }
-            } while (string.IsNullOrWhiteSpace(nome)); // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só apertada a tecla "Enter" ou apenas espaços vazios.
+                    if (nome == "")
+                    {
+                        MensagemErro(); // Exibe uma mensagem de erro se o dado for inválido, se há somente espaços em branco ou se foi só apertada a tecla "Enter".
+                    }
+                } while (string.IsNullOrWhiteSpace(nome)); // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só apertada a tecla "Enter" ou apenas espaços vazios.
+                dadoCorreto = VerificaDadoIndividual("nome"); // Verifica individualmente se o dado está de acordo com o desejado
+            } while (dadoCorreto);
+            return nome;
+        }
 
-            Cabecalho();
-            DadosIniciaisPaciente(nome);
-            Espacos("__");
-            // Recebe o sexo da pessoa e verifica se é um sexo válido.
-            // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
+        /// <summary>
+        /// <para>Função recebe os argumentos para montar dinamicamente a tela de triagem.</para>
+        /// <para>Recebe o sexo do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <returns>Retorna uma <b>string</b> com o sexo do paciente</returns>
+        static string RecebeSexo(string nome)
+        {
+            bool dadoCorreto = false;
             string sexo = "";
-            bool validaSexo = false;
             do
             {
-                Console.Write("Insira o sexo do paciente (M para Masculino ou F para Feminino): ");
-                sexo = Console.ReadLine().ToLower();
+                Cabecalho();
+                DadosIniciaisPaciente(nome);
+                Espacos("__");
+                // Recebe o sexo da pessoa e verifica se é um sexo válido.
+                // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
 
-                // Verifica a entrada convertendo a string para minúsculo e comparando com a string correspondente (masculino ou feminino).
-                // Caso não esteja de acordo, exibe uma mensagem e pede para o usuário digitar da maneira correta.
-                if (sexo == "m")
+                bool validaSexo = false;
+                do
                 {
-                    sexo = "Masculino";
-                    validaSexo = true;
-                }
-                else if (sexo == "f")
-                {
-                    sexo = "Feminino";
-                    validaSexo = true;
-                }
-                else
-                {
-                    // Atribui a cor vermelha à fonte do console
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nInsira apenas M para Masculino ou F para Feminino");
-                    // Retorna a cor anterior à fonte do console
-                    Console.ResetColor();
-                }
-            } while (!validaSexo);
+                    Console.Write("Insira o sexo do paciente (M para Masculino ou F para Feminino): ");
+                    sexo = Console.ReadLine().ToLower();
 
-            Cabecalho();
-            DadosIniciaisPaciente(nome, sexo);
-            Espacos("__");
-            // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais).
+                    // Verifica a entrada convertendo a string para minúsculo e comparando com a string correspondente (masculino ou feminino).
+                    // Caso não esteja de acordo, exibe uma mensagem e pede para o usuário digitar da maneira correta.
+                    if (sexo == "m")
+                    {
+                        sexo = "Masculino";
+                        validaSexo = true;
+                    }
+                    else if (sexo == "f")
+                    {
+                        sexo = "Feminino";
+                        validaSexo = true;
+                    }
+                    else
+                    {
+                        // Atribui a cor vermelha à fonte do console
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nInsira apenas M para Masculino ou F para Feminino");
+                        // Retorna a cor anterior à fonte do console
+                        Console.ResetColor();
+                    }
+
+                } while (!validaSexo);
+                dadoCorreto = VerificaDadoIndividual("sexo"); // Verifica individualmente se o dado está de acordo com o desejado
+            } while (dadoCorreto);
+            return sexo;
+        }
+
+        /// <summary>
+        /// <para>Função recebe os argumentos para montar dinamicamente a tela de triagem.</para>
+        /// <para>Recebe a idade do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <param name="sexo"></param>
+        /// <returns>Retorna um <b>int</b> com a idade do paciente</returns>
+        private static int RecebeIdade(string nome, string sexo)
+        {
+            bool dadoCorreto = false;
             int idade = 0;
-            bool validaIdade = false;
-            while (!validaIdade)
+            do
             {
-                Console.Write("Insira a idade completa do paciente, sem casas decimais: ");
-                int.TryParse(Console.ReadLine(), out idade);
+                Cabecalho();
+                DadosIniciaisPaciente(nome, sexo);
+                Espacos("__");
+                // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais).
+                bool validaIdade = false;
+                while (!validaIdade)
+                {
+                    Console.Write("Insira a idade do paciente, sem casas decimais: ");
+                    int.TryParse(Console.ReadLine(), out idade);
 
-                // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado.
-                // Chama a função ValidaDados passando o idade inserida e a string "idade" para determinar o tipo do dado a ser validado. 
-                // Retorna true para a variável "validaIdade" se o valor inserido for válido e verifica no while se o dado é válido.
-                validaIdade = ValidaDados(idade, "idade");
-            }
+                    // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado.
+                    // Chama a função ValidaDados passando o idade inserida e a string "idade" para determinar o tipo do dado a ser validado. 
+                    // Retorna true para a variável "validaIdade" se o valor inserido for válido e verifica no while se o dado é válido.
+                    validaIdade = ValidaDados(idade, "idade");
+                }
+                dadoCorreto = VerificaDadoIndividual("idade"); // Verifica individualmente se o dado está de acordo com o desejado
+            } while (dadoCorreto);
+            return idade;
+        }
 
-            Cabecalho();
-            DadosIniciaisPaciente(nome, sexo, idade);
-            Espacos("__");
-            // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
+        /// <summary>
+        /// Função recebe os argumentos para montar dinamicamente a tela de triagem.
+        /// <para>Recebe a altura do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <param name="sexo"></param>
+        /// <param name="idade"></param>
+        /// <returns>Retorna um <b>double</b> com a Altura do paciente</returns>
+        private static double RecebeAltura(string nome, string sexo, int idade)
+        {
+            bool dadoCorreto = false;
             double altura = 0;
-            bool validaAltura = false;
             do
             {
-                Console.Write("Insira a altura do paciente em Metros - 1,65 - por exemplo: ");
-                // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
-                altura = ConversaoDouble(Console.ReadLine());
+                Cabecalho();
+                DadosIniciaisPaciente(nome, sexo, idade);
+                Espacos("__");
+                // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
 
-                // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                // Chama a função ValidaDados passando a altura inserida e a string "altura" para determinar o tipo do dado a ser validado. 
-                // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
-                validaAltura = ValidaDados(altura, "altura");
+                bool validaAltura = false;
+                do
+                {
+                    Console.Write("Insira a altura do paciente em Metros - 1,65 - por exemplo: ");
+                    // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
+                    altura = ConversaoDouble(Console.ReadLine());
 
-            } while (!validaAltura);
+                    // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
+                    // Chama a função ValidaDados passando a altura inserida e a string "altura" para determinar o tipo do dado a ser validado. 
+                    // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
+                    validaAltura = ValidaDados(altura, "altura");
 
-            Cabecalho();
-            DadosIniciaisPaciente(nome, sexo, idade, altura);
-            Espacos("__");
-            // Recebimento do peso em double para considerar as casas decimais.
+                } while (!validaAltura);
+                dadoCorreto = VerificaDadoIndividual("altura"); // Verifica individualmente se o dado está de acordo com o desejado
+            } while (dadoCorreto);
+            return altura;
+        }
+
+        /// <summary>
+        /// Função recebe os argumentos para montar dinamicamente a tela de triagem.
+        /// <para>Recebe o peso do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <param name="sexo"></param>
+        /// <param name="idade"></param>
+        /// <param name="altura"></param>
+        /// <returns>Retorna um <b>double</b> com o peso do paciente</returns>
+        private static double RecebePeso(string nome, string sexo, int idade, double altura)
+        {
             double peso = 0;
-            bool validaPeso = false;
+            bool dadoCorreto = false;
             do
             {
-                Console.Write("Insira o peso do paciente em Quilos - 65,5 - por exemplo: ");
-                // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
-                peso = ConversaoDouble(Console.ReadLine());
+                Cabecalho();
+                DadosIniciaisPaciente(nome, sexo, idade, altura);
+                Espacos("__");
+                // Recebimento do peso em double para considerar as casas decimais.
 
-                // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
-                // Chama a função ValidaDados passando o peso inserido e a string "peso" para determinar o tipo do dado a ser validado. 
-                // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
-                validaPeso = ValidaDados(peso, "peso");
+                bool validaPeso = false;
+                do
+                {
+                    Console.Write("Insira o peso do paciente em Quilos - 65,5 - por exemplo: ");
+                    // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
+                    peso = ConversaoDouble(Console.ReadLine());
 
-            } while (!validaPeso);
+                    // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
+                    // Chama a função ValidaDados passando o peso inserido e a string "peso" para determinar o tipo do dado a ser validado. 
+                    // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
+                    validaPeso = ValidaDados(peso, "peso");
 
-            // Retorna um Array com todas as variáveis recebidas pelo usuário
-            // (Foi utilizado um array de object para poder retornar todos os dados sem a necessidade de conversão)
-            return new object[] { nome, sexo, idade, altura, peso };
+                } while (!validaPeso);
+                dadoCorreto = VerificaDadoIndividual("peso"); // Verifica individualmente se o dado está de acordo com o desejado
+            } while (dadoCorreto);
+            return peso;
         }
 
         /// <summary>
@@ -182,7 +257,7 @@ namespace DesafioIMC
             {
                 if (dado < 1 || dado > 120)
                 {
-                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo - Informe um valor entre 1 e 120 anos";
+                    mensagem = $"\nInforme uma {tipo} apenas com números e com valor positivo entre 1 e 120 anos";
                     validaDado = false;
                 }
             }
@@ -190,7 +265,7 @@ namespace DesafioIMC
             {
                 if (dado < 0.3 || dado > 2.6)
                 {
-                    mensagem = $"\nInforme uma {tipo} válida apenas com números e com valor positivo - Informe um valor entre 0,3m e 2,6m";
+                    mensagem = $"\nInforme uma {tipo} apenas com números e com valor positivo entre 0,3m e 2,6m";
                     validaDado = false;
                 }
             }
@@ -198,7 +273,7 @@ namespace DesafioIMC
             {
                 if (dado < 1 || dado > 250)
                 {
-                    mensagem = $"\nInforme um {tipo} válido apenas com números e entre 1kg e 250kg";
+                    mensagem = $"\nInforme um {tipo} apenas com números e entre 1kg e 250kg";
                     validaDado = false;
                 }
             }
@@ -301,11 +376,11 @@ namespace DesafioIMC
             {
                 Console.WriteLine("Os dados digitados estão todos corretos?\n");
                 Console.Write($"Digite ");
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Green; // Modifica a coloração para identificar S para Sim em verde
                 Console.Write($"S para Sim");
                 Console.ResetColor();
                 Console.Write(" ou ");
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red; // Modifica a coloração para identificar N para Não em vermelho
                 Console.Write("N para Não");
                 Console.ResetColor();
                 Console.Write(": ");
@@ -323,6 +398,52 @@ namespace DesafioIMC
                     MensagemErro();
                 }
             } while (dadosCorretos);
+        }
+
+        /// <summary>
+        /// Verifica cada dado individualmente. 
+        /// <para>Busca evitar que o usuário digite algo indesejado e tenha que digitar todos os campos para poder corrigir o erro</para>
+        /// </summary>
+        /// <param name="tipo"></param>
+        /// <returns>Retorna uma variável do tipo <b>bool</b> com o resultado da validação></returns>
+        static bool VerificaDadoIndividual(string tipo)
+        {
+            // Personaliza a mensagem de acordo com o que for verificado e troca a letra das palavras já definidas.
+            string letra = "o";
+            if (tipo == "altura" || tipo == "idade")
+            {
+                letra = "a";
+            }
+            bool dadoCorreto = true;
+            do
+            {
+                Espacos("__");
+                Console.WriteLine($"\n{letra.ToUpper()} {tipo} digitad{letra} está corret{letra}?\n");
+                Console.Write($"Digite ");
+                Console.ForegroundColor = ConsoleColor.Green; // Modifica a coloração para identificar S para Sim em verde
+                Console.Write($"S para Sim");
+                Console.ResetColor();
+                Console.Write(" ou ");
+                Console.ForegroundColor = ConsoleColor.Red; // Modifica a coloração para identificar N para Não em vermelho
+                Console.Write("N para Não");
+                Console.ResetColor();
+                Console.Write(": ");
+                string dados = Console.ReadLine().ToLower();
+                if (dados == "s")
+                {
+                    dadoCorreto = false;
+                }
+                else if (dados == "n")
+                {
+                    dadoCorreto = true;
+                    break;
+                }
+                else
+                {
+                    MensagemErro();
+                }
+            } while (dadoCorreto);
+            return dadoCorreto;
         }
 
         /// <summary>
@@ -451,7 +572,7 @@ namespace DesafioIMC
 
         /// <summary>
         /// Monta a tela inicial dinamicamente a cada inserção dos dados do paciente.
-        /// Caso não haja dado inserido, monta a tela apenas com os títulos dos dados.
+        /// <para>Caso não haja dado inserido, monta a tela apenas com os títulos dos dados.</para>
         /// </summary>
         /// <param name="nome"></param>
         /// <param name="sexo"></param>
@@ -578,19 +699,19 @@ namespace DesafioIMC
                     }
                     else if (escolha == 2)
                     {
-                        Sair();
+                        Sair("-");
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nDigite uma opção válida");
+                        Console.WriteLine("\nDigite uma opção válida - 1 para Voltar ou 2 para Sair");
                         Console.ResetColor();
                     }
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nDigite uma opção válida");
+                    Console.WriteLine("\nDigite uma opção válida - 1 para Voltar ou 2 para Sair");
                     Console.ResetColor();
                 }
             }
@@ -624,15 +745,54 @@ namespace DesafioIMC
             Console.ResetColor();
             Console.WriteLine();
         }
-
         /// <summary>
-        /// Função para sair do programa
+        /// Função para sair do programa com uma mensagem de despedida
+        /// <para>Cria uma "moldura" verde com a mensagem final de acordo com a string "simbolo" que é recebida no argumento</para>
+        /// <para>Imprime a mensagem em azul no centro da moldura</para>
         /// </summary>
-        static void Sair()
+        static void Sair(string simbolo)
         {
-            Espacos("..");
-            Console.WriteLine("\nOpção selecionada: Sair");
-            Console.WriteLine("Até mais!");
+            Console.Clear();
+            Espacos("+");
+            Console.ForegroundColor = ConsoleColor.Green;
+            for (int i = 0; i < 20; i++)
+            {
+                Console.Write(simbolo);
+                for (int j = 1; j < 120 - 1; j++)
+                {
+                    if (i == 10 && j == 48)
+                    {
+                        Console.SetCursorPosition(0, 10);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(119, 10);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(47, 10);
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("Opção selecionada: Sair");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.SetCursorPosition(0, 11);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(119, 11);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(49, 12);
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("Obrigado e até mais!");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.SetCursorPosition(0, 12);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(119, 12);
+                        Console.Write(simbolo);
+                        Console.SetCursorPosition(119, 12);
+                        break;
+                    }
+                    Console.Write(" ");
+                }
+                Console.Write(simbolo);
+            }
+            Espacos("+");
+            Console.ResetColor();
+            //Deixarei comentado, pois só dá pra ver na prática se usar o .exe
+            //Thread.Sleep(4000); // Cria um delay para encerrar o programa em seguida.
             Environment.Exit(0);
         }
     }
