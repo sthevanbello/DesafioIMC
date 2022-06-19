@@ -23,7 +23,7 @@ namespace DesafioIMC
             // Monta a tela inicial dinamicamente
             DadosIniciaisPaciente();
             // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-            Espacos("__");
+            DivisoriaHorizontal("__");
             // Recebe a cor atual das letras do console
             //var color = Console.ForegroundColor;
 
@@ -41,7 +41,7 @@ namespace DesafioIMC
             TelaDiagnostico(nome, sexo, idade, altura, peso, imc);
 
             // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-            Espacos("_+");
+            DivisoriaHorizontal("_+");
 
             // Término do programa ou voltar à tela inicial para inserir novos dados
             TelaDeDecisaoFinal();
@@ -64,7 +64,7 @@ namespace DesafioIMC
                 // Monta a tela inicial dinamicamente
                 DadosIniciaisPaciente();
                 // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 do
                 {   
                     Console.Write("Insira o nome completo do paciente: ");
@@ -94,7 +94,7 @@ namespace DesafioIMC
             {
                 Cabecalho();
                 DadosIniciaisPaciente(nome);
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 // Recebe o sexo da pessoa e verifica se é um sexo válido.
                 // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
 
@@ -146,7 +146,7 @@ namespace DesafioIMC
             {
                 Cabecalho();
                 DadosIniciaisPaciente(nome, sexo);
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais).
                 bool validaIdade = false;
                 while (!validaIdade)
@@ -180,7 +180,7 @@ namespace DesafioIMC
             {
                 Cabecalho();
                 DadosIniciaisPaciente(nome, sexo, idade);
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
 
                 bool validaAltura = false;
@@ -218,7 +218,7 @@ namespace DesafioIMC
             {
                 Cabecalho();
                 DadosIniciaisPaciente(nome, sexo, idade, altura);
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 // Recebimento do peso em double para considerar as casas decimais.
 
                 bool validaPeso = false;
@@ -334,7 +334,7 @@ namespace DesafioIMC
 
             Cabecalho();
             DadosIniciaisPaciente(nome, sexo, idade, altura, peso);
-            Espacos("__");
+            DivisoriaHorizontal("__");
             // Chama a função para perguntar se os dados inseridos na triagem estão corretos
             VerificaDadosCorretos();
 
@@ -417,7 +417,7 @@ namespace DesafioIMC
             bool dadoCorreto = true;
             do
             {
-                Espacos("__");
+                DivisoriaHorizontal("__");
                 Console.WriteLine($"\n{letra.ToUpper()} {tipo} digitad{letra} está corret{letra}?\n");
                 Console.Write($"Digite ");
                 Console.ForegroundColor = ConsoleColor.Green; // Modifica a coloração para identificar S para Sim em verde
@@ -559,7 +559,7 @@ namespace DesafioIMC
             Console.Clear();
 
             // Função Espacos serve para gerar uma linha divisória
-            Espacos("_+");
+            DivisoriaHorizontal("_+");
 
             // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -567,7 +567,7 @@ namespace DesafioIMC
             Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(78, ' '));
             // Retorna a cor anterior à fonte do console.
             Console.ResetColor();
-            Espacos("=-");
+            DivisoriaHorizontal("=-");
         }
 
         /// <summary>
@@ -684,7 +684,7 @@ namespace DesafioIMC
             Console.ResetColor();
             Console.Write("- Para sair do programa\n");
 
-            Espacos(".-");
+            DivisoriaHorizontal(".-");
             while (!fim)
             {
                 Console.Write("Opção: ");
@@ -699,7 +699,7 @@ namespace DesafioIMC
                     }
                     else if (escolha == 2)
                     {
-                        Sair("-");
+                        Sair("+");
                     }
                     else
                     {
@@ -735,7 +735,7 @@ namespace DesafioIMC
         /// Cria uma linha de separação a partir de um símbolo em formato string
         /// </summary>
         /// <param name="simbolo"></param>
-        static void Espacos(string simbolo)
+        static void DivisoriaHorizontal(string simbolo)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             for (int i = 0; i < Console.WindowWidth / simbolo.Length; i++)
@@ -753,7 +753,7 @@ namespace DesafioIMC
         static void Sair(string simbolo)
         {
             Console.Clear();
-            Espacos("+");
+            DivisoriaHorizontal("+");
             Console.ForegroundColor = ConsoleColor.Green;
             for (int i = 0; i < 20; i++)
             {
@@ -789,7 +789,7 @@ namespace DesafioIMC
                 }
                 Console.Write(simbolo);
             }
-            Espacos("+");
+            DivisoriaHorizontal("+");
             Console.ResetColor();
             //Deixarei comentado, pois só dá pra ver na prática se usar o .exe
             //Thread.Sleep(4000); // Cria um delay para encerrar o programa em seguida.
