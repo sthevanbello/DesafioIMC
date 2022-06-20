@@ -24,8 +24,6 @@ namespace DesafioIMC
             DadosIniciaisPaciente();
             // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
             DivisoriaHorizontal("__");
-            // Recebe a cor atual das letras do console
-            //var color = Console.ForegroundColor;
 
             //Preenchimento de variáveis recebidas pelo array de retorno do método de "EntradaDeDados"
             string nome = RecebeNome();
@@ -791,8 +789,6 @@ namespace DesafioIMC
             }
             DivisoriaHorizontal("+");
             Console.ResetColor();
-            //Deixarei comentado, pois só dá pra ver na prática se usar o .exe
-            //Thread.Sleep(4000); // Cria um delay para encerrar o programa em seguida.
             Environment.Exit(0);
         }
     }
