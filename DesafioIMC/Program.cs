@@ -750,6 +750,8 @@ namespace DesafioIMC
         /// </summary>
         static void Sair(string simbolo)
         {
+            // Essa função serve para criar a moldura e colocar a frase no meio da tela utilizando o Console.SetCursorPosition
+
             Console.Clear();
             DivisoriaHorizontal("+");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -760,7 +762,7 @@ namespace DesafioIMC
                 {
                     if (i == 10 && j == 48)
                     {
-                        Console.SetCursorPosition(0, 10);
+                        Console.SetCursorPosition(0, 10); // Essa função coloca o cursor na posição desejada. Console.SetCursorPosition(horizontal, vertical)
                         Console.Write(simbolo);
                         Console.SetCursorPosition(119, 10);
                         Console.Write(simbolo);
@@ -789,7 +791,7 @@ namespace DesafioIMC
             }
             DivisoriaHorizontal("+");
             Console.ResetColor();
-            Environment.Exit(0);
+            Environment.Exit(0); // Essa função sai do programa e encerra a aplicação
         }
     }
 }
