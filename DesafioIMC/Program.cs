@@ -9,40 +9,40 @@ namespace DesafioIMC
         static void Main(string[] args)
         {
             // Chamada da função da Tela Inicial para iniciar a inserção de dados 
-            TelaInicial();
+            ExibirTelaInicial();
         }
 
         /// <summary>
         /// Exibe a tela inicial para inserir os dados do paciente
         /// </summary>
-        static void TelaInicial()
+        static void ExibirTelaInicial()
         {
             // Este trecho é utilizado em mais pontos do código e serve para apresentar dinamicamente a tela inicial de triagem do paciente
             //Monta o cabeçalho inicial da tela
-            Cabecalho();
+            ExibirCabecalho();
             // Monta a tela inicial dinamicamente
-            DadosIniciaisPaciente();
+            ExibirDadosIniciais();
             // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-            DivisoriaHorizontal("__");
+            ExibirDivisoriaHorizontal("__");
 
             //Preenchimento de variáveis recebidas pelo array de retorno do método de "EntradaDeDados"
-            string nome = RecebeNome();
-            string sexo = RecebeSexo(nome);
-            int idade = RecebeIdade(nome, sexo);
-            double altura = RecebeAltura(nome, sexo, idade);
-            double peso = RecebePeso(nome, sexo, idade, altura);
+            string nome = ReceberNome();
+            string sexo = ReceberSexo(nome);
+            int idade = ReceberIdade(nome, sexo);
+            double altura = ReceberAltura(nome, sexo, idade);
+            double peso = ReceberPeso(nome, sexo, idade, altura);
 
             // Chamada da função para calcular o IMC e retornar o valor do IMC como double, considerando as casas decimais.
-            double imc = CalculaImc(peso, altura);
+            double imc = CalcularIMC(peso, altura);
 
             // Chama a função para exibir a tela de diagnósticos prévio
-            TelaDiagnostico(nome, sexo, idade, altura, peso, imc);
+            ExibirTelaDiagnostico(nome, sexo, idade, altura, peso, imc);
 
             // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-            DivisoriaHorizontal("_+");
+            ExibirDivisoriaHorizontal("_+");
 
             // Término do programa ou voltar à tela inicial para inserir novos dados
-            TelaDeDecisaoFinal();
+            ExibirTelaDeDecisaoFinal();
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace DesafioIMC
         /// <para>Recebe o nome do paciente e faz a verificação se o dado está correto e se o usuário confirma o dado digitado</para>
         /// </summary>
         /// <returns>Retorna a <b>string</b> com o nome do paciente</returns>
-        static string RecebeNome()
+        static string ReceberNome()
         {
             // Recebe o nome da pessoa e verifica se é um nome válido, se há apenas espaços ou se só apertou a tecla "Enter".
             string nome = "";
@@ -58,11 +58,11 @@ namespace DesafioIMC
             do
             {
                 //Monta o cabeçalho inicial da tela
-                Cabecalho();
+                ExibirCabecalho();
                 // Monta a tela inicial dinamicamente
-                DadosIniciaisPaciente();
+                ExibirDadosIniciais();
                 // Cria uma linha divisória na tela de acordo com o caractere passado como parâmetro da função
-                DivisoriaHorizontal("__");
+                ExibirDivisoriaHorizontal("__");
                 do
                 {   
                     Console.Write("Insira o nome completo do paciente: ");
@@ -70,10 +70,10 @@ namespace DesafioIMC
 
                     if (nome == "")
                     {
-                        MensagemErro(); // Exibe uma mensagem de erro se o dado for inválido, se há somente espaços em branco ou se foi só apertada a tecla "Enter".
+                        ExibirMensagemErro(); // Exibe uma mensagem de erro se o dado for inválido, se há somente espaços em branco ou se foi só apertada a tecla "Enter".
                     }
                 } while (string.IsNullOrWhiteSpace(nome)); // Essa função string.IsNullOrWhiteSpace(nome) verifica se foi só apertada a tecla "Enter" ou apenas espaços vazios.
-                dadoCorreto = VerificaDadoIndividual("nome"); // Verifica individualmente se o dado está de acordo com o desejado
+                dadoCorreto = VerificarDadoIndividual("nome"); // Verifica individualmente se o dado está de acordo com o desejado
             } while (dadoCorreto);
             return nome;
         }
@@ -84,15 +84,15 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="nome"></param>
         /// <returns>Retorna uma <b>string</b> com o sexo do paciente</returns>
-        static string RecebeSexo(string nome)
+        static string ReceberSexo(string nome)
         {
             bool dadoCorreto = false;
             string sexo = "";
             do
             {
-                Cabecalho();
-                DadosIniciaisPaciente(nome);
-                DivisoriaHorizontal("__");
+                ExibirCabecalho();
+                ExibirDadosIniciais(nome);
+                ExibirDivisoriaHorizontal("__");
                 // Recebe o sexo da pessoa e verifica se é um sexo válido.
                 // Usando o método Do While e conferindo se foi digitado corretamente, como é solicitado.
 
@@ -124,7 +124,7 @@ namespace DesafioIMC
                     }
 
                 } while (!validaSexo);
-                dadoCorreto = VerificaDadoIndividual("sexo"); // Verifica individualmente se o dado está de acordo com o desejado
+                dadoCorreto = VerificarDadoIndividual("sexo"); // Verifica individualmente se o dado está de acordo com o desejado
             } while (dadoCorreto);
             return sexo;
         }
@@ -136,15 +136,15 @@ namespace DesafioIMC
         /// <param name="nome"></param>
         /// <param name="sexo"></param>
         /// <returns>Retorna um <b>int</b> com a idade do paciente</returns>
-        private static int RecebeIdade(string nome, string sexo)
+        private static int ReceberIdade(string nome, string sexo)
         {
             bool dadoCorreto = false;
             int idade = 0;
             do
             {
-                Cabecalho();
-                DadosIniciaisPaciente(nome, sexo);
-                DivisoriaHorizontal("__");
+                ExibirCabecalho();
+                ExibirDadosIniciais(nome, sexo);
+                ExibirDivisoriaHorizontal("__");
                 // recebimento da idade e verificação se é um valor inteiro válido (positivo e sem casas decimais).
                 bool validaIdade = false;
                 while (!validaIdade)
@@ -155,9 +155,9 @@ namespace DesafioIMC
                     // Verifica se a idade inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado.
                     // Chama a função ValidaDados passando o idade inserida e a string "idade" para determinar o tipo do dado a ser validado. 
                     // Retorna true para a variável "validaIdade" se o valor inserido for válido e verifica no while se o dado é válido.
-                    validaIdade = ValidaDados(idade, "idade");
+                    validaIdade = ValidarDados(idade, "idade");
                 }
-                dadoCorreto = VerificaDadoIndividual("idade"); // Verifica individualmente se o dado está de acordo com o desejado
+                dadoCorreto = VerificarDadoIndividual("idade"); // Verifica individualmente se o dado está de acordo com o desejado
             } while (dadoCorreto);
             return idade;
         }
@@ -170,15 +170,15 @@ namespace DesafioIMC
         /// <param name="sexo"></param>
         /// <param name="idade"></param>
         /// <returns>Retorna um <b>double</b> com a Altura do paciente</returns>
-        private static double RecebeAltura(string nome, string sexo, int idade)
+        private static double ReceberAltura(string nome, string sexo, int idade)
         {
             bool dadoCorreto = false;
             double altura = 0;
             do
             {
-                Cabecalho();
-                DadosIniciaisPaciente(nome, sexo, idade);
-                DivisoriaHorizontal("__");
+                ExibirCabecalho();
+                ExibirDadosIniciais(nome, sexo, idade);
+                ExibirDivisoriaHorizontal("__");
                 // Recebimento do valor da altura em tipo Double para considerar as casas decimais.
 
                 bool validaAltura = false;
@@ -186,15 +186,15 @@ namespace DesafioIMC
                 {
                     Console.Write("Insira a altura do paciente em Metros - 1,65 - por exemplo: ");
                     // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável altura
-                    altura = ConversaoDouble(Console.ReadLine());
+                    altura = ConverterParaDouble(Console.ReadLine());
 
                     // Verifica se a altura inserida é válida. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                     // Chama a função ValidaDados passando a altura inserida e a string "altura" para determinar o tipo do dado a ser validado. 
                     // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
-                    validaAltura = ValidaDados(altura, "altura");
+                    validaAltura = ValidarDados(altura, "altura");
 
                 } while (!validaAltura);
-                dadoCorreto = VerificaDadoIndividual("altura"); // Verifica individualmente se o dado está de acordo com o desejado
+                dadoCorreto = VerificarDadoIndividual("altura"); // Verifica individualmente se o dado está de acordo com o desejado
             } while (dadoCorreto);
             return altura;
         }
@@ -208,15 +208,15 @@ namespace DesafioIMC
         /// <param name="idade"></param>
         /// <param name="altura"></param>
         /// <returns>Retorna um <b>double</b> com o peso do paciente</returns>
-        private static double RecebePeso(string nome, string sexo, int idade, double altura)
+        private static double ReceberPeso(string nome, string sexo, int idade, double altura)
         {
             double peso = 0;
             bool dadoCorreto = false;
             do
             {
-                Cabecalho();
-                DadosIniciaisPaciente(nome, sexo, idade, altura);
-                DivisoriaHorizontal("__");
+                ExibirCabecalho();
+                ExibirDadosIniciais(nome, sexo, idade, altura);
+                ExibirDivisoriaHorizontal("__");
                 // Recebimento do peso em double para considerar as casas decimais.
 
                 bool validaPeso = false;
@@ -224,15 +224,15 @@ namespace DesafioIMC
                 {
                     Console.Write("Insira o peso do paciente em Quilos - 65,5 - por exemplo: ");
                     // Chama a função de conversão do valor inserido pelo usuário para Double com ponto ou com vírgula e retorna um double para a variável peso
-                    peso = ConversaoDouble(Console.ReadLine());
+                    peso = ConverterParaDouble(Console.ReadLine());
 
                     // Verifica se o peso inserido é válido. Não pode receber valor negativo, letra ou apenas apertar "Enter" no teclado
                     // Chama a função ValidaDados passando o peso inserido e a string "peso" para determinar o tipo do dado a ser validado. 
                     // Retorna true para a variável se o valor inserido for válido e verifica no while se o dado é válido
-                    validaPeso = ValidaDados(peso, "peso");
+                    validaPeso = ValidarDados(peso, "peso");
 
                 } while (!validaPeso);
-                dadoCorreto = VerificaDadoIndividual("peso"); // Verifica individualmente se o dado está de acordo com o desejado
+                dadoCorreto = VerificarDadoIndividual("peso"); // Verifica individualmente se o dado está de acordo com o desejado
             } while (dadoCorreto);
             return peso;
         }
@@ -243,7 +243,7 @@ namespace DesafioIMC
         /// <param name="validaDado"></param>
         /// <param name="dado"></param>
         /// <returns>Retorna true ou false de acordo com o valor recebido</returns>
-        static bool ValidaDados(double dado, string tipo)
+        static bool ValidarDados(double dado, string tipo)
         {
             // Recebe um dado e seu tipo para fazer as verificações de acordo com o que foi passado como argumento da função.
             // Verifica se é idade, altura ou peso e faz a validação de cada tipo individualmente.
@@ -288,7 +288,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="valor"></param>
         /// <returns>Retorna um valor string convertido para double</returns>
-        static double ConversaoDouble(string valor)
+        static double ConverterParaDouble(string valor)
         {
             // Faz a conversão para double da string valor recebida como argumento  da função
             // Verifica se é utilizada a vírgula ou o ponto
@@ -308,18 +308,18 @@ namespace DesafioIMC
         /// <param name="altura"></param>
         /// <param name="peso"></param>
         /// <param name="imc"></param>
-        static void TelaDiagnostico(string nome, string sexo, int idade, double altura, double peso, double imc)
+        static void ExibirTelaDiagnostico(string nome, string sexo, int idade, double altura, double peso, double imc)
         {
             // Chama a função IdentificaCategoria passando a idade da pessoa e retornando uma string de acordo com a faixa etária.
-            string categoria = IdentificaCategoria(idade);
+            string categoria = IdentificarCategoria(idade);
 
             // Foram usadas duas funções separadas. Uma para Risco e uma para Recomendações para separar a responsabilidade de cada item.
 
             // Chama a função que Calcula os riscos e retorna uma string com o risco de acordo com o IMC passado como parâmetro da função.
-            string riscos = CalculaRiscos(imc);
+            string riscos = IdentificarRiscos(imc);
 
             // Chama a função que calcula a recomendação e retorna uma string com a recomendação de acordo com o IMC passado como parâmetro da função.
-            string recomendacoesIniciais = CalculaRecomendacoes(imc);
+            string recomendacoesIniciais = IdentificarRecomendacoes(imc);
 
             string imcDesejavel = "Entre 20 e 24";
 
@@ -330,19 +330,19 @@ namespace DesafioIMC
 
             // Apresentação da tela de Diagnóstico Prévio com os dados inseridos pelo usuário e com os cálculos de acordo com o IMC
 
-            Cabecalho();
-            DadosIniciaisPaciente(nome, sexo, idade, altura, peso);
-            DivisoriaHorizontal("__");
+            ExibirCabecalho();
+            ExibirDadosIniciais(nome, sexo, idade, altura, peso);
+            ExibirDivisoriaHorizontal("__");
             // Chama a função para perguntar se os dados inseridos na triagem estão corretos
-            VerificaDadosCorretos();
+            VerificarDadosCorretos();
 
-            Cabecalho();
+            ExibirCabecalho();
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("DIAGNÓSTICO PRÉVIO\n");
             // Retorna a cor anterior à fonte do console
             Console.ResetColor();
             // Imprime os dados iniciais do paciente
-            DadosIniciaisPaciente(nome, sexo, idade, altura, peso, preenchido: true);
+            ExibirDadosIniciais(nome, sexo, idade, altura, peso, preenchido: true);
             // Imprime a Categoria na tela
             Console.Write($"Categoria: \t");
             Console.ForegroundColor = colorCampos;
@@ -367,7 +367,7 @@ namespace DesafioIMC
         /// Função de confirmação dos dados digitados na triagem. 
         /// <code>Dados corretos? S para Sim e N para Não</code>
         /// </summary>
-        static void VerificaDadosCorretos()
+        static void VerificarDadosCorretos()
         {
             bool dadosCorretos = true;
             do
@@ -389,11 +389,11 @@ namespace DesafioIMC
                 }
                 else if (dados == "n")
                 {
-                    TelaInicial();
+                    ExibirTelaInicial();
                 }
                 else
                 {
-                    MensagemErro();
+                    ExibirMensagemErro();
                 }
             } while (dadosCorretos);
         }
@@ -404,7 +404,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="tipo"></param>
         /// <returns>Retorna uma variável do tipo <b>bool</b> com o resultado da validação></returns>
-        static bool VerificaDadoIndividual(string tipo)
+        static bool VerificarDadoIndividual(string tipo)
         {
             // Personaliza a mensagem de acordo com o que for verificado e troca a letra das palavras já definidas.
             string letra = "o";
@@ -415,7 +415,7 @@ namespace DesafioIMC
             bool dadoCorreto = true;
             do
             {
-                DivisoriaHorizontal("__");
+                ExibirDivisoriaHorizontal("__");
                 Console.WriteLine($"\n{letra.ToUpper()} {tipo} digitad{letra} está corret{letra}?\n");
                 Console.Write($"Digite ");
                 Console.ForegroundColor = ConsoleColor.Green; // Modifica a coloração para identificar S para Sim em verde
@@ -438,7 +438,7 @@ namespace DesafioIMC
                 }
                 else
                 {
-                    MensagemErro();
+                    ExibirMensagemErro();
                 }
             } while (dadoCorreto);
             return dadoCorreto;
@@ -449,7 +449,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="idade"></param>
         /// <returns>Retorna a categoria de acordo com a idade do paciente</returns>
-        static string IdentificaCategoria(int idade)
+        static string IdentificarCategoria(int idade)
         {
             // Testa a variável idade e retorna a categoria que se enquadra.
 
@@ -482,7 +482,7 @@ namespace DesafioIMC
         /// <param name="peso"></param>
         /// <param name="altura"></param>
         /// <returns>Retorna  um <b>double</b> com o valor do imc de acordo com o cálculo</returns>
-        static double CalculaImc(double peso, double altura)
+        static double CalcularIMC(double peso, double altura)
         {
             return peso / (altura * altura);
         }
@@ -492,7 +492,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="imc"></param>
         /// <returns>Retorna uma string com o Risco de acordo com o imc fornecido</returns>
-        static string CalculaRecomendacoes(double imc)
+        static string IdentificarRecomendacoes(double imc)
         {
             // Verifica em qual Recomendação se enquadra o imc recebido como parâmetro e retorna a recomendação correspondente 
             if (imc < 20)
@@ -522,7 +522,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="imc"></param>
         /// <returns>Retorna uma string com a Recomendação de acordo com o imc fornecido</returns>
-        static string CalculaRiscos(double imc)
+        static string IdentificarRiscos(double imc)
         {
             // Verifica em qual Risco se enquadra o imc recebido como argumento
 
@@ -551,13 +551,13 @@ namespace DesafioIMC
         /// <summary>
         /// Monta o cabeçalho padrão das telas
         /// </summary>
-        static void Cabecalho()
+        static void ExibirCabecalho()
         {
             // Limpa a tela
             Console.Clear();
 
             // Função Espacos serve para gerar uma linha divisória
-            DivisoriaHorizontal("_+");
+            ExibirDivisoriaHorizontal("_+");
 
             // Atribui a cor azul à fonte do console
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -565,7 +565,7 @@ namespace DesafioIMC
             Console.WriteLine($"Cálculo de IMC Para Diagnóstico Prévio".PadLeft(78, ' '));
             // Retorna a cor anterior à fonte do console.
             Console.ResetColor();
-            DivisoriaHorizontal("=-");
+            ExibirDivisoriaHorizontal("=-");
         }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace DesafioIMC
         /// <param name="idade"></param>
         /// <param name="altura"></param>
         /// <param name="peso"></param>
-        static void DadosIniciaisPaciente(string nome = "", string sexo = "", int idade = -1, double altura = 0D, double peso = 0D, bool preenchido = false)
+        static void ExibirDadosIniciais(string nome = "", string sexo = "", int idade = -1, double altura = 0D, double peso = 0D, bool preenchido = false)
         {
             if (!preenchido)
             {
@@ -587,11 +587,11 @@ namespace DesafioIMC
 
             // Preenche dinamicamente a tela conforme os valores forem digitados pelo usuário
             Console.ResetColor();
-            CamposTexto("Nome", nome);
-            CamposTexto("Sexo", sexo);
-            CamposNumeroInt("Idade", idade);
-            CamposNumeroDouble("Altura", altura);
-            CamposNumeroDouble("Peso", peso);
+            ExibirCampoTexto("Nome", nome);
+            ExibirCampoTexto("Sexo", sexo);
+            ExibirCamposNumeroInt("Idade", idade);
+            ExibirCamposNumeroDouble("Altura", altura);
+            ExibirCamposNumeroDouble("Peso", peso);
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="tipo"></param>
         /// <param name="dado"></param>
-        static void CamposTexto(string tipo, string dado)
+        static void ExibirCampoTexto(string tipo, string dado)
         {
             string dadoApresentado;
             // Preenche o título do dado
@@ -623,7 +623,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="tipo"></param>
         /// <param name="dado"></param>
-        static void CamposNumeroDouble(string tipo, double dado)
+        static void ExibirCamposNumeroDouble(string tipo, double dado)
         {
             string unidade = "";
             Console.Write($"{tipo}:\t\t");
@@ -647,7 +647,7 @@ namespace DesafioIMC
         /// </summary>
         /// <param name="tipo"></param>
         /// <param name="dado"></param>
-        static void CamposNumeroInt(string tipo, int dado)
+        static void ExibirCamposNumeroInt(string tipo, int dado)
         {
             Console.Write($"{tipo}:\t\t");
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -664,7 +664,7 @@ namespace DesafioIMC
         /// <summary>
         /// Função para escolher se quer voltar à tela inicial ou se quer sair do programa
         /// </summary>
-        static void TelaDeDecisaoFinal()
+        static void ExibirTelaDeDecisaoFinal()
         {
             Console.WriteLine();
             bool fim = false;
@@ -682,7 +682,7 @@ namespace DesafioIMC
             Console.ResetColor();
             Console.Write("- Para sair do programa\n");
 
-            DivisoriaHorizontal(".-");
+            ExibirDivisoriaHorizontal(".-");
             while (!fim)
             {
                 Console.Write("Opção: ");
@@ -693,7 +693,7 @@ namespace DesafioIMC
                 {
                     if (escolha == 1)
                     {
-                        TelaInicial();
+                        ExibirTelaInicial();
                     }
                     else if (escolha == 2)
                     {
@@ -718,7 +718,7 @@ namespace DesafioIMC
         /// <summary>
         /// Exibe uma mensagem de erro com destaque na cor da fonte
         /// </summary>
-        static void MensagemErro()
+        static void ExibirMensagemErro()
         {
             // Atribui a cor vermelha à fonte do console
             Console.ForegroundColor = ConsoleColor.Red;
@@ -733,7 +733,7 @@ namespace DesafioIMC
         /// Cria uma linha de separação a partir de um símbolo em formato string
         /// </summary>
         /// <param name="simbolo"></param>
-        static void DivisoriaHorizontal(string simbolo)
+        static void ExibirDivisoriaHorizontal(string simbolo)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             for (int i = 0; i < Console.WindowWidth / simbolo.Length; i++)
@@ -753,7 +753,7 @@ namespace DesafioIMC
             // Essa função serve para criar a moldura e colocar a frase no meio da tela utilizando o Console.SetCursorPosition
 
             Console.Clear();
-            DivisoriaHorizontal("+");
+            ExibirDivisoriaHorizontal("+");
             Console.ForegroundColor = ConsoleColor.Green;
             for (int i = 0; i < 20; i++)
             {
@@ -789,7 +789,7 @@ namespace DesafioIMC
                 }
                 Console.Write(simbolo);
             }
-            DivisoriaHorizontal("+");
+            ExibirDivisoriaHorizontal("+");
             Console.ResetColor();
             Environment.Exit(0); // Essa função sai do programa e encerra a aplicação
         }
